@@ -3,7 +3,7 @@
 	{% for entry in titles %}
 	<li>
 	{{ entry.title }}
-	<a href="javascript: getPlaylist('/dj_add_title/{{ entry.id }}');">
+	<a href="javascript: getPlaylist('{% url dj_add_title id=entry.id %}');">
 		add
 	</a>
 	</li>

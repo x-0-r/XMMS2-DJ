@@ -100,6 +100,12 @@ class XmmsClient(object):
         result.wait()
         return result.value()
 
+    def playlist_add_id(self, id):
+        """Eine Medialib-ID zur Playlist hinzufügen"""
+        result = self.client.playlist_add_id(id)
+        result.wait()
+        return result.value()
+
     def playlist_add_collection(self, collection):
         """Alle Einträge einer Collection zur Playlist hinzufügen"""
         result = self.client.playlist_add_collection(collection)

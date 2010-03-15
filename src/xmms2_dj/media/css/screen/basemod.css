@@ -47,9 +47,21 @@
   /* Design of the Main Layout Elements | Gestaltung der Hauptelemente des Layouts */
 
 #header {
-	background-color: silver;
+	background-color: black;
+	background-image: url(/media/img/header.jpg);
+	background-repeat: no-repeat;
 	padding-left: 10px;
 	border-bottom: 2px solid black;
+	color: white;
+}
+
+#header a {
+	color: yellow;
+	font-weight: bold;
+}
+
+#header h1 {
+	color: white;
 }
 
   #topnav {  }

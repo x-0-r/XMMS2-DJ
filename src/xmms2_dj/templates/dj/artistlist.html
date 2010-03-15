@@ -1,8 +1,13 @@
 <h2>Artist</h2>
 <ul>
+	<li>
+	<a href="javascript: getAlbum('{% url dj_list_albums artist='Alle' %}'); getTitles('{% url dj_list_titles artist='Alle' album='Alle'%}');" >
+		Alle
+	</a>
+	</li>
 	{% for entry in artists %}
 	<li>
-	<a href="javascript: getAlbum('{% url dj_list_albums artist=entry.artist|urlencode %}');">
+	<a href="javascript: getAlbum('{% url dj_list_albums artist=entry.artist|urlencode %}'); getTitles('{% url dj_list_titles artist=entry.artist|urlencode album='Alle'|urlencode %}');">
 		{{ entry.artist }}
 	</a> 
 	<a href="javascript: getPlaylist('{% url dj_add_artist artist=entry.artist|urlencode %}');">

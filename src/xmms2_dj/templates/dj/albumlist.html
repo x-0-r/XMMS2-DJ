@@ -1,5 +1,10 @@
 <h2>Album</h2>
 <ul>
+	<li>
+	<a href="javascript: getTitles('{% url dj_list_titles artist=selected_artist|urlencode album='Alle' %}');">
+		Alle
+	</a>
+	</li>
 	{% for entry in albums %}
 	<li>
 	<a href="javascript: getTitles('{% url dj_list_titles artist=selected_artist|urlencode album=entry.album|urlencode %}');">

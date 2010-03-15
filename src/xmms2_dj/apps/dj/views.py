@@ -8,6 +8,7 @@ from django.template import Context, loader, RequestContext
 from django.contrib.auth.decorators import login_required, permission_required
 from django.core.urlresolvers import reverse
 from django.conf import settings
+from django.utils.encoding import smart_str
 from urllib import unquote_plus
 
 import xmms2
@@ -87,6 +88,7 @@ def prev(request):
 
     return status(request)
 
+
 def artist_add(request, artist):
     client = settings.XMMS2_CLIENT
 
@@ -124,21 +126,16 @@ def album_add(request, artist, album):
     })
     return HttpResponse(template.render(context))
 
-
-def artist_select(request, artist):
+def add_title(request, id):
     client = settings.XMMS2_CLIENT
 
-    if artist != "Alle":
-        artist_coll = collections.Match(field="artist", value=artist)
-    else:
-        artist_coll = collections.Universe()
+    id = int(id)
+    client.playlist_add_id(id)
 
-    template = loader.get_template('dj/albumlist.html')
-    context = RequestContext(request, {
-        'selected_artist': artist,
-        'albums': client.coll_query(['album'], artist_coll),
+    template = loader.get_template('dj/playlist.html')
+    context = Context({
+        'playlist': client.list(),
     })
-
     return HttpResponse(template.render(context))
 
 
@@ -157,6 +154,8 @@ def list_albums(request, artist="Alle"):
     client = settings.XMMS2_CLIENT
 
     artist = unquote_plus(artist)
+
+    artist = smart_str(artist) # vermeidet UnicodeError bei xmms2-Funktionen
 
     if artist != "Alle":
         artist_coll = collections.Match(field="artist", value=artist)
