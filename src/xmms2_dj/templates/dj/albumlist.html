@@ -1,0 +1,14 @@
+<h2>Album</h2>
+<ul>
+	{% for entry in albums %}
+	<li>
+	<a href="javascript: getTitles('{% url dj_list_titles artist=selected_artist|urlencode album=entry.album|urlencode %}');">
+	{{ entry.album }}
+	</a>
+	<a href="javascript: getPlaylist('{% url dj_add_album artist=selected_artist|urlencode album=entry.album|urlencode %}');">
+		add
+	</a>
+	</li>
+
+	{% endfor %}
+</ul>

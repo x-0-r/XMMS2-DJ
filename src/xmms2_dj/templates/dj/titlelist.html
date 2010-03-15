@@ -1,0 +1,12 @@
+<h2>Title</h2>
+<ul>
+	{% for entry in titles %}
+	<li>
+	{{ entry.title }}
+	<a href="javascript: getPlaylist('/dj_add_title/{{ entry.id }}');">
+		add
+	</a>
+	</li>
+
+	{% endfor %}
+</ul>

@@ -1,0 +1,31 @@
+{% extends "dj/base.html" %}
+
+{% block player_controls %}
+	<a href="javascript: updateStatus('{% url dj_previous %}');">previous</a>
+	<a href="javascript: updateStatus('{% url dj_play %}');">play</a>
+	<a href="javascript: updateStatus('{% url dj_stop %}');">stop</a>
+	<a href="javascript: updateStatus('{% url dj_next %}');">next</a>
+
+	<div id="player_status">
+		{% include "dj/player_status.html" %}
+	</div>
+{% endblock %}
+
+{% block artists %}
+	{% include "dj/artistlist.html" %}
+{% endblock %}
+
+{% block albums %}
+	{% include "dj/albumlist.html" %}
+{% endblock %}
+
+{% block titles %}
+	{% include "dj/titlelist.html" %}
+{% endblock %}
+
+{% block base %}
+	<div id="title_list">
+	</div>
+
+	{% include "dj/playlist.html" %}
+{% endblock %}

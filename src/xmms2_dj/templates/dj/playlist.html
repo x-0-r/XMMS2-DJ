@@ -1,0 +1,16 @@
+<div id="playlist">
+	<h2>Playlist</h2>
+	<ul>
+		{% for entry in playlist %}
+		<li>
+		<a href="javascript: updateStatus('{% url dj_jump id=entry.0 %}');">
+			{{ entry.1 }} - {{ entry.2 }}
+		</a>
+		<a href="javascript: getPlaylist('{% url dj_remove id=entry.0 %}');">
+			(-)
+		</a>
+		</li>
+		{% endfor %}
+	</ul>
+</div>
+
