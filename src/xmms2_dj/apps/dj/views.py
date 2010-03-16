@@ -14,7 +14,12 @@ from urllib import unquote_plus
 import xmms2
 from xmmsclient import collections
 
+
 def common(request, client=settings.XMMS2_CLIENT, artist='Alle', album='Alle'):
+    """Rendert die Index-Seite
+    
+    @deprecated wird nur noch von der Funktion index benötigt und kann daher in diese integriert werden
+    """
     if artist != "Alle":
         artist_coll = collections.Match(field="artist", value=artist)
     else:
@@ -43,10 +48,16 @@ def common(request, client=settings.XMMS2_CLIENT, artist='Alle', album='Alle'):
 
     return HttpResponse(template.render(context))
 
+
 def index(request):
+    """Rendert die Indexseite
+    """
     return common(request)    
 
+
 def status(request):
+    """Updaten des Status des XMMS-Client
+    """
     client = settings.XMMS2_CLIENT
 
     template = loader.get_template('dj/player_status.html')
@@ -55,20 +66,30 @@ def status(request):
     })
     return HttpResponse(template.render(context))
 
+
 def play(request):
+    """Playback starten und Status updaten
+    """
     client = settings.XMMS2_CLIENT
     client.play()
 
     return status(request)
 
+
 def stop(request):
+    """Playback stoppen und Status updaten
+    """
     client = settings.XMMS2_CLIENT
     client.stop()
 
     return status(request)
 
-def jump(request, id):
 
+def jump(request, id):
+    """Zur Titel in Playlist springen und Status updaten
+       
+       @param id ID des Playlisteintrags
+    """
     id = int(id)
 
     client = settings.XMMS2_CLIENT
@@ -76,13 +97,19 @@ def jump(request, id):
     
     return status(request)
 
+
 def next(request):
+    """Zu nächstem Eintrag in Playlist springen
+    """
     client = settings.XMMS2_CLIENT
     client.next()
 
     return status(request)
 
+
 def prev(request):
+    """Zu vorherigem Eintrag in Playlist springen
+    """
     client = settings.XMMS2_CLIENT
     client.prev()
 
@@ -90,6 +117,13 @@ def prev(request):
 
 
 def artist_add(request, artist):
+    """Alle Titel eines Künstlers zur Playlist hinzufügen
+       
+       @param artist Name des Künstlers (bzw. der Band)
+
+       @remarks
+         Evtl sollte Namensgebung nach "add_artist" geändert werden
+    """
     client = settings.XMMS2_CLIENT
 
     artist = unquote_plus(artist)
@@ -104,6 +138,14 @@ def artist_add(request, artist):
 
 
 def album_add(request, artist, album):
+    """Alle Titel eines Albums zur Playlist hinzufügen
+
+       @param artist Name des Künstlers
+       @param album Albumname
+
+       @remarks
+         Name sollte evtl. nach "add_album" geändert werden
+    """
     client = settings.XMMS2_CLIENT
 
     artist = unquote_plus(artist)
@@ -126,7 +168,12 @@ def album_add(request, artist, album):
     })
     return HttpResponse(template.render(context))
 
+
 def add_title(request, id):
+    """Einen Titel zur Playlist hinzufügen
+
+       @param id ID des Titels (laut XMMS2 MediaLib)
+    """
     client = settings.XMMS2_CLIENT
 
     id = int(id)
@@ -140,6 +187,8 @@ def add_title(request, id):
 
 
 def list_artists(requests):
+    """Alle Künstler auflisten
+    """
     client = settings.XMMS2_CLIENT
 
     template = loader.get_template('dj/artistlist.html')
@@ -151,10 +200,13 @@ def list_artists(requests):
 
 
 def list_albums(request, artist="Alle"):
+    """Alle Albem eines Künstlers auflisten
+       
+       @param artist Name des Künstlers/der Band
+    """
     client = settings.XMMS2_CLIENT
 
     artist = unquote_plus(artist)
-
     artist = smart_str(artist) # vermeidet UnicodeError bei xmms2-Funktionen
 
     if artist != "Alle":
@@ -172,13 +224,15 @@ def list_albums(request, artist="Alle"):
 
 
 def list_titles(request, artist="Alle", album="Alle"):
+    """Alle Titel eines Künstlers und oder eines Albums auflisten
+
+       @param artist Name des Künstlers
+       @param album Albumtitel
+    """
     client = settings.XMMS2_CLIENT
 
-    artist = unquote_plus(artist)
-    album = unquote_plus(album)
-
-    print artist
-    print album
+    artist = smart_str(unquote_plus(artist)) # Vermeiden von UnicodeError
+    album = smart_str(unquote_plus(album))
 
     if artist != "Alle":
         artist_coll = collections.Match(field="artist", value=artist)
@@ -196,8 +250,6 @@ def list_titles(request, artist="Alle", album="Alle"):
             collections.Universe()
         )
 
-    print client.coll_query(['id', 'title'], album_coll)
-
     template = loader.get_template('dj/titlelist.html')
     context = RequestContext(request, {
         'selected_artist': artist,
@@ -210,6 +262,10 @@ def list_titles(request, artist="Alle", album="Alle"):
 
 
 def remove(request, id):
+    """Eintrag aus der aktiven Playlist entfernen
+       
+       @param id ID des Titels (entspricht Position in der Playlist)
+    """
     id = int(id)
     client = settings.XMMS2_CLIENT
     client.playlist_remove_id(id)
