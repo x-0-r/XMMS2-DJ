@@ -86,7 +86,11 @@ class XmmsClient(object):
             result = self.client.medialib_get_info(id)
             result.wait()
             info = result.value()
-            title_list += [(pl_id, info["artist"], info["title"])]
+            title_list += [{'id': pl_id,
+                            'artist': info["artist"],
+                            'title': info["title"],
+                            'duration': info["duration"],
+                           }]
             pl_id += 1
 
         return title_list

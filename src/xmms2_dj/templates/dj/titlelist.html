@@ -1,7 +1,8 @@
 <h2>Title</h2>
+<span>({{ titles|length }} item{{ titles|length|pluralize }})</span>
 <ul>
 	{% for entry in titles %}
-	<li>
+	<li class="{% cycle 'emph' '' %}">
 	{{ entry.title }}
 	<a href="javascript: getPlaylist('{% url dj_add_title id=entry.id %}');">
 		add

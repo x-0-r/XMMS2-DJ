@@ -1,4 +1,5 @@
 <h2>Album</h2>
+<span>({{ albums|length }} item{{ albums|length|pluralize }})</span>
 <ul>
 	<li>
 	<a href="javascript: getTitles('{% url dj_list_titles artist=selected_artist|urlencode album='Alle' %}');">
@@ -6,7 +7,7 @@
 	</a>
 	</li>
 	{% for entry in albums %}
-	<li>
+	<li class="{% cycle 'emph' '' %}">
 	<a href="javascript: getTitles('{% url dj_list_titles artist=selected_artist|urlencode album=entry.album|urlencode %}');">
 	{{ entry.album }}
 	</a>

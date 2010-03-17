@@ -36,9 +36,15 @@ def common(request, client=settings.XMMS2_CLIENT, artist='Alle', album='Alle'):
             collections.Universe()
         )
 
+    playlist = client.list()
+    playtime = 0
+    for entry in playlist:
+        playtime += entry['duration']
+
     template = loader.get_template('dj/index.html')
     context = RequestContext(request, {
-        'playlist': client.list(),
+        'playlist': playlist,
+        'playtime': playtime,
         'current': client.current(),
         'artists': client.coll_query(['artist']),
         'selected_artist': artist,
@@ -115,6 +121,23 @@ def prev(request):
 
     return status(request)
 
+def get_playlist(request):
+    """Liefert die aktuelle Playlist aus
+    """
+    client = settings.XMMS2_CLIENT
+
+    playlist = client.list()
+    playtime = 0
+    for entry in playlist:
+        playtime += entry['duration']
+
+    template = loader.get_template('dj/playlist.html')
+    context = RequestContext(request, {
+        'playtime': playtime,
+        'playlist': playlist,
+    })
+    return HttpResponse(template.render(context))
+
 
 def artist_add(request, artist):
     """Alle Titel eines Künstlers zur Playlist hinzufügen
@@ -130,12 +153,8 @@ def artist_add(request, artist):
     artist_coll = collections.Match(field="artist", value=artist)
     client.playlist_add_collection(artist_coll)
 
-    template = loader.get_template('dj/playlist.html')
-    context = RequestContext(request, {
-        'playlist': client.list(),
-    })
-    return HttpResponse(template.render(context))
-
+    return get_playlist(request)
+    
 
 def album_add(request, artist, album):
     """Alle Titel eines Albums zur Playlist hinzufügen
@@ -162,12 +181,7 @@ def album_add(request, artist, album):
     )
     client.playlist_add_collection(album_coll)
 
-    template = loader.get_template('dj/playlist.html')
-    context = RequestContext(request, {
-        'playlist': client.list(),
-    })
-    return HttpResponse(template.render(context))
-
+    return get_playlist(request)
 
 def add_title(request, id):
     """Einen Titel zur Playlist hinzufügen
@@ -179,11 +193,7 @@ def add_title(request, id):
     id = int(id)
     client.playlist_add_id(id)
 
-    template = loader.get_template('dj/playlist.html')
-    context = Context({
-        'playlist': client.list(),
-    })
-    return HttpResponse(template.render(context))
+    return get_playlist(request)
 
 
 def list_artists(requests):
@@ -270,9 +280,4 @@ def remove(request, id):
     client = settings.XMMS2_CLIENT
     client.playlist_remove_id(id)
 
-
-    template = loader.get_template('dj/playlist.html')
-    context = RequestContext(request, {
-        'playlist': client.list(),
-    })
-    return HttpResponse(template.render(context))
+    return get_playlist(request)

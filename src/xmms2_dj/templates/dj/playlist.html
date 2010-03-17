@@ -1,12 +1,16 @@
+{% load dj_extras %}
+
 <div id="playlist">
 	<h2>Playlist</h2>
+	<span>({{ playlist|length }} item{{ playlist|length|pluralize }} – total playtime: {{ playtime|timespan }})</span>
 	<ul>
 		{% for entry in playlist %}
-		<li>
-		<a href="javascript: updateStatus('{% url dj_jump id=entry.0 %}');">
-			{{ entry.1 }} - {{ entry.2 }}
+		<li class="{% cycle 'emph' '' %}">
+		<a href="javascript: updateStatus('{% url dj_jump id=entry.id %}');">
+			{{ entry.artist }} - {{ entry.title }}
 		</a>
-		<a href="javascript: getPlaylist('{% url dj_remove id=entry.0 %}');">
+		<span>({{ entry.duration|minutes }}:{{ entry.duration|seconds }})</span>
+		<a href="javascript: getPlaylist('{% url dj_remove id=entry.id %}');">
 			(-)
 		</a>
 		</li>
