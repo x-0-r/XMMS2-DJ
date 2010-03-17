@@ -12,8 +12,8 @@
 		<![endif]-->
 
 		<script type="text/javascript" src="{{ MEDIA_URL }}js/mootools-1.2.4-core-yc.js"></script>
+		<script type="text/javascript" src="{{ MEDIA_URL }}js/xmms2-dj.js"></script>
 		<script type="text/javascript">
-
 function refresh() {
 	updateStatus('{% url dj_status %}');
 }
@@ -22,69 +22,6 @@ window.addEvent('domready', function() {
 	var periodical;
 	periodical = refresh.periodical(1500, this);
 });
-
-
-function updateStatus(url) {
-	var req = new Request.HTML({
-		url: url,
-		onSuccess: function(html) {
-			$('player_status').set('text', '');
-			$('player_status').adopt(html);
-		},
-		onFailure: function() {
-			$('player_status').set('text', 'The request failed.');
-		}
-	});
-
-	req.send();
-}
-
-function getPlaylist(url) {
-	var req = new Request.HTML({
-	url: url,
-	onSuccess: function(html) {
-		$('col3_content').set('text', '');
-		$('col3_content').adopt(html);
-	},
-	onFailure: function() {
-		$('col3_content').set('text', 'The request failed.');
-	}
-	});
-
-	req.send();
-}
-
-function getTitles (url) {
-	var req = new Request.HTML({
-		url: url,
-		onSuccess: function(html) {
-			$('col4_content').set('text', '');
-			$('col4_content').adopt(html);
-		},
-		onFailure: function() {
-			$('col4_content').set('text', 'Request failed.');
-		}
-	});
-
-	req.send();
-}
-
-
-function getAlbum (url) {
-	var req = new Request.HTML({
-	url: url,
-	onSuccess: function(html) {
-		$('col2_content').set('text', '');
-		$('col2_content').adopt(html);
-	},
-	onFailure: function() {
-		$('col2_content').set('text', 'The request failed.');
-	}
-	});
-
-	req.send();
-}
-
 		</script>
 	</head>
 	<body>
