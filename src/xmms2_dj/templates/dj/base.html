@@ -11,7 +11,7 @@
 		<link href="{{ MEDIA_URL }}css/patches/patch_layout_draft.css" rel="stylesheet" type="text/css" />
 		<![endif]-->
 
-		<script type="text/javascript" src="{{ MEDIA_URL }}js/mootools-1.2.4-core-yc.js"></script>
+		<script type="text/javascript" src="{{ MEDIA_URL }}js/clientcide.2.2.0.js"></script>
 		<script type="text/javascript" src="{{ MEDIA_URL }}js/xmms2-dj.js"></script>
 		<script type="text/javascript">
 function refresh() {
@@ -35,7 +35,7 @@ window.addEvent('domready', function() {
 			<div class="page">
 				<div id="header" role="banner">
 					<div id="topnav" role="contentinfo">
-						<span>#topnav is here</span>
+						<span>xmms2-dj git-version</span>
 					</div>
 					<h1>XMMS2 DJ</h1>
 
@@ -49,6 +49,8 @@ window.addEvent('domready', function() {
 				<div id="nav" role="navigation">
 					<div class="hlist">
 						<ul>
+							<li class="active"><a href="#">Local Media</a></li>
+							<li><a href="#">Radio-Streams</a></li>
 						</ul>
 					</div>
 				</div>
@@ -60,8 +62,17 @@ window.addEvent('domready', function() {
 					<!-- begin: #col1 - first float column -->
 					<div id="col1" role="complementary">
 						<div id="col1_content" class="clearfix">
+							<h2>Artists</h2>
+							<form method="post" action="#">
+								<label for="search_artist">search: </title>
+								<input type="text"
+								  	onkeyup="searchTimer('/search/artist/', 'searchArtist');"
+							       		id="search_artist" />
+							</form>
+							<div id="artists">
 							{% block artists %}
 							{% endblock %}
+							</div>
 					        </div>
 					</div>
 					<!-- end: #col1 -->
@@ -69,22 +80,47 @@ window.addEvent('domready', function() {
 					<!-- begin: #col2 second float column -->
 					<div id="col2" role="complementary">
 						<div id="col2_content" class="clearfix">
+							<h2>Albums</h2>
+							<form method="post" action="#">
+								<label for="search_album">search: </title>
+								<input type="text"
+								  	onkeyup="searchTimer('/search/album/', 'searchAlbum');"
+							       		id="search_album" />
+							</form>
+
+							<div id="albums">
 							{% block albums %}
 							{% endblock %}
+							</div>
 						</div>
 					</div>
 					<!-- end: #col2 -->
 
 					<div id="col4" role="complementary">
 						<div id="col4_content" class="clearfix">
+							<h2>Titles</h2>
+							<form method="post" action="#">
+								<label for="search_title">search: </title>
+								<input type="text"
+								  	onkeyup="searchTimer('/search/title/', 'searchTitle');"
+							       		id="search_title" />
+							</form>
+
+							<div id="titles">
 							{% block titles %}
 							{% endblock %}
+							</div>
 						</div>
 					</div>
 
 					<!-- begin: #col3 static column -->
 					<div id="col3" role="main">
 						<div id="col3_content" class="clearfix"> 
+							<h2>
+								Playlist
+								<a href="javascript: getPlaylist('{% url dj_clear_playlist %}');">clear</a>
+								<a href="#">export</a>
+							</h2>
 							{% block base %}
 							{% endblock %}
 						</div>
@@ -103,6 +139,5 @@ window.addEvent('domready', function() {
 			</div>
 		</div>
 		<!-- full skiplink functionality in webkit browsers -->
-		<script src="{{ MEDIA_URL }}/yaml/core/js/webkit-focusfix.js" type="text/javascript"></script>
 	</body>
 </html>

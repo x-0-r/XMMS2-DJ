@@ -24,8 +24,11 @@
 {% endblock %}
 
 {% block base %}
-	<div id="title_list">
+	<div id="playlist_list">
+		{% include "dj/playlist_list.html" %}
 	</div>
 
-	{% include "dj/playlist.html" %}
+	<div id="playlist">
+		{% include "dj/playlist.html" %}
+	</div>
 {% endblock %}
