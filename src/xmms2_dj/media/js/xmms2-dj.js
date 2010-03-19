@@ -1,60 +1,153 @@
-function updateStatus(url) {
-	var req = new Request.HTML({
-		url: url,
-		onSuccess: function(html) {
-			$('player_status').set('text', '');
-			$('player_status').adopt(html);
-		},
-		onFailure: function() {
-			$('player_status').set('text', 'The request failed.');
-		}
-	});
+Clientcide.setAssetLocation("/media/clientcide/");
 
-	req.send();
+/*
+window.addEvent('domready', function() {
+	$('search_artist').addEvent('change', searchTimer('/search/artist/'));
+});
+*/
+
+
+function updateStatus(url) {
+	new Request.HTML({
+		url: url,
+		update: $('player_status'),
+	}).send();
+}
+
+function getPlaylistList(url) {
+	var waiter = new Waiter($('playlist_list'));
+	waiter.start();
+	new Request.HTML({
+		url:url,
+		update: $('playlist_list'),
+	}).send();
+	waiter.stop();
 }
 
 function getPlaylist(url) {
-	var req = new Request.HTML({
-	url: url,
-	onSuccess: function(html) {
-		$('col3_content').set('text', '');
-		$('col3_content').adopt(html);
-	},
-	onFailure: function() {
-		$('col3_content').set('text', 'The request failed.');
-	}
-	});
+	var waiter= new Waiter($('playlist'));
+	waiter.start();
+	new Request.HTML({
+		url: url,
+		update: $('playlist'),
+	}).send();
+	waiter.stop();
+}
 
-	req.send();
+function loadPlaylist (select) {
+	var url = select.options[select.options.selectedIndex].value;
+	getPlaylist(url);
+}
+
+function createPlaylist (playlist_url, playlist_list_url) {
+	var name = $('playlist-new').get('value');
+
+	var waiter = new Waiter($('playlist'));
+	waiter.start();
+	new Request.HTML({
+		url: playlist_url,
+		method: "post",
+		update: $('playlist'),
+		data: "playlist="+name
+	}).send();
+	waiter.stop();
+
+	getPlaylistList(playlist_list_url);
 }
 
 function getTitles (url) {
-	var req = new Request.HTML({
+	var waiter = new Waiter('titles');
+	waiter.start();
+	new Request.HTML({
 		url: url,
 		onSuccess: function(html) {
-			$('col4_content').set('text', '');
-			$('col4_content').adopt(html);
+			$('titles').set('text', '');
+			$('titles').adopt(html);
+			waiter.stop();
 		},
-		onFailure: function() {
-			$('col4_content').set('text', 'Request failed.');
+		onFailure: function () {
+			waiter.stop();
 		}
-	});
-
-	req.send();
+	}).send();
 }
 
-
 function getAlbum (url) {
-	var req = new Request.HTML({
-	url: url,
-	onSuccess: function(html) {
-		$('col2_content').set('text', '');
-		$('col2_content').adopt(html);
-	},
-	onFailure: function() {
-		$('col2_content').set('text', 'The request failed.');
-	}
-	});
+	var waiter = new Waiter('albums');
+	waiter.start();
+	new Request.HTML({
+		url: url,
+		onSuccess: function(html) {
+			$('albums').set('text', '');
+			$('albums').adopt(html);
+		}
+	}).send();
+	waiter.stop();
+}
 
-	req.send();
+var t;
+
+function searchTimer (url, functionName) {
+	clearTimeout(t);
+	t = setTimeout(functionName + "('" + url + "')", 500);
+}
+
+function searchArtist (url) {
+	var searchstring = $('search_artist').get('value');
+	var artistSearchWaiter = new Waiter('artists');
+	artistSearchWaiter.start();
+	new Request.HTML({
+		url: url,
+		method: "post",
+		onSuccess: function(html) {
+			$('artists').set('text', '');
+			$('artists').adopt(html);
+			artistSearchWaiter.stop();
+		},
+		onFailure: function() {
+			$('artists').set('text', 'The request failed.');
+			artistSearchWaiter.stop();
+		},
+		data: "artist="+searchstring
+	}).send();
+}
+
+function searchAlbum (url) {
+	var searchstring = $('search_album').get('value');
+	var selectedArtist = $('selected_artist').get('value');
+	var artistSearchWaiter = new Waiter('albums');
+	artistSearchWaiter.start();
+	new Request.HTML({
+		url: url,
+		method: "post",
+		onSuccess: function(html) {
+			$('albums').set('text', '');
+			$('albums').adopt(html);
+			artistSearchWaiter.stop();
+		},
+		onFailure: function() {
+			$('albums').set('text', 'The request failed.');
+			artistSearchWaiter.stop();
+		},
+		data: "album="+searchstring+"&artist="+selectedArtist
+	}).send();
+}
+
+function searchTitle (url) {
+	var searchstring = $('search_title').get('value');
+	var artistSearchWaiter = new Waiter('titles');
+	artistSearchWaiter.start();
+	new Request.HTML({
+		url: url,
+		method: "post",
+		onSuccess: function(html) {
+			$('titles').set('text', '');
+			$('titles').adopt(html);
+			artistSearchWaiter.stop();
+		},
+		onFailure: function() {
+			$('titles').set('text', 'The request failed.');
+			artistSearchWaiter.stop();
+		},
+		data: "title="+searchstring
+	}).send();
 }

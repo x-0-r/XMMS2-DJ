@@ -121,3 +121,44 @@ class XmmsClient(object):
         result = self.client.playlist_remove_entry(id)
         result.wait()
         return result.value()
+
+    def playlist_clear(self):
+        """Die aktuelle Playlist leeren"""
+        result = self.client.playlist_clear()
+        result.wait()
+        return result.value()
+
+    def playlist_list(self):
+        """Playlisten auflisten"""
+        result = self.client.playlist_list()
+        result.wait()
+        list = []
+        for entry in result.value():
+            # laut Client-Konvention dürfen Listen, die mit '_' beginnen für
+            # Benutzer nicht sichtbar sein
+            if not entry.startswith('_'):
+                list += [entry,]
+
+        return list
+
+    def playlist_active(self):
+        """Gibt den Namen der aktiven Playlist zurück"""
+        result = self.client.playlist_current_active()
+        result.wait()
+        return result.value()
+
+    def playlist_load(self, playlist):
+        """Lädt die angegebene Playliste"""
+        result = self.client.playlist_load(playlist)
+        result.wait()
+        return result.value()
+
+
+    def playlist_create(self, playlist):
+        """Erstellt eine neue Playlist
+           
+           @param playlist Name der Playlist
+        """
+        result = self.client.playlist_create(playlist)
+        result.wait()
+        return result.value()

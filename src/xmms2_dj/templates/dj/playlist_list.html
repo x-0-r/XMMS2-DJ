@@ -1,0 +1,16 @@
+<form class="yform">
+	<label for="playlist-select">choose playlist</label>
+	<select id="playlist-select"
+		name="playlist"
+		onchange="loadPlaylist(this)">
+		{% for entry in playlist_list %}
+		<option value="{% url dj_load_playlist playlist=entry|urlencode %}"
+			{% ifequal entry active_playlist %}selected="selected"{% endifequal %}>
+			{{ entry }}
+		</option>
+		{% endfor %}
+	</select>
+	<label for="playlist-new">or create a new one</label>
+	<input type="text" name="playlist-new" id="playlist-new" />
+	<input type="button" value="create" onclick="createPlaylist('{% url dj_create_playlist %}', '{% url dj_list_playlists %}');"/>
+</form>

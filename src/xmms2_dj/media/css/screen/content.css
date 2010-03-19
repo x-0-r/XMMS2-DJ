@@ -68,14 +68,14 @@
 
   /* --- Lists | Listen  -------------------------------------------------------------------------------- */
 
-  ul, ol, dl { line-height:1.5em; margin:0 0 1em 1em; }
+  ul, ol, dl { line-height:1.5em; margin:0; }
   ul { list-style-type:none; }
   ul ul { list-style-type:circle; margin-bottom:0; }
 
   ol { list-style-type:decimal; }
   ol ol { list-style-type:lower-latin; margin-bottom:0; }
 
-  li { margin-left:0; line-height:1.5em; }
+  li { margin-left:0; line-height:1.5em; padding: 0; }
   li.emph { background: #eee; }
 
   dt { font-weight:bold; }
@@ -131,6 +131,15 @@
   a:focus { text-decoration:underline; color:#000; background: #fff; outline: 3px #f93 solid; }
   a:hover,
   a:active { color:#182E7A; text-decoration:underline; outline: 0 none; }
+
+  h2 > a {
+	  font-size: 0.5em;
+	  visibility: hidden;
+  }
+
+  h2:hover > a {
+	  visibility: visible;
+  }
 
   /* --- images (with optional captions) | Bilder (mit optionaler Bildunterschrift) ------------------ */
 

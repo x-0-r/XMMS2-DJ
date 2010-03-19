@@ -5,7 +5,6 @@ TODO:
 - Playlists verwalten (rename, löschen, speichern, neu, export als XML, etc.)
 - Verschieben von Titeln in der Playlist
 - Drag & Drop Funktion in Playlist
-- Ajax-Ladeicon (siehe: http://www.clientcide.com/wiki/cnet-libraries/07-ui/11-waiter)
 - Detailinfos zu Songs
 - Verwalten von Radio-Streams
 - Beachten von Albumartist-Tag

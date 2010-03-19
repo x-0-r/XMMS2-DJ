@@ -43,6 +43,8 @@ def common(request, client=settings.XMMS2_CLIENT, artist='Alle', album='Alle'):
 
     template = loader.get_template('dj/index.html')
     context = RequestContext(request, {
+        'playlist_list': client.playlist_list(),
+        'active_playlist': client.playlist_active(),
         'playlist': playlist,
         'playtime': playtime,
         'current': client.current(),
@@ -281,3 +283,102 @@ def remove(request, id):
     client.playlist_remove_id(id)
 
     return get_playlist(request)
+
+
+def clear_playlist(request):
+    """Die aktuelle Playliste leeren
+    """
+    client = settings.XMMS2_CLIENT
+    client.playlist_clear()
+
+    return get_playlist(request)
+
+
+def load_playlist(request, playlist):
+    """Lädt eine Playlist
+       
+       @playlist Name der Playlist
+    """
+    client = settings.XMMS2_CLIENT
+    
+    playlist = smart_str(unquote_plus(playlist))
+    client.playlist_load(playlist)
+
+    print playlist
+
+    return get_playlist(request)
+
+
+def create_playlist(request):
+    """Erstelle eine neue Playlist"""
+    client = settings.XMMS2_CLIENT
+
+    playlist = request.POST.get("playlist")
+
+    client.playlist_create(playlist)
+    client.playlist_load(playlist)
+    
+    return get_playlist(request)
+
+
+def get_playlist_list(request):
+    """Rendert eine Liste vorhandener Playlists
+    """
+    client = settings.XMMS2_CLIENT
+
+    template = loader.get_template("dj/playlist_list.html")
+    context = Context({
+        'playlist_list': client.playlist_list(),
+        'active_playlist': client.playlist_active(),
+    })
+    return HttpResponse(template.render(context))
+
+
+def search_artist(request):
+    """Nach Künstler suchen
+    """
+    client = settings.XMMS2_CLIENT
+
+    artist = request.POST.get('artist')
+    artist = "*%s*" % artist
+    artist_coll = collections.Match(field="artist", value=artist)
+
+    template = loader.get_template("dj/artistlist.html")
+    context = Context({
+        'artists': client.coll_query(['artist'], artist_coll),
+    })
+    return HttpResponse(template.render(context))
+
+
+def search_album(request):
+    """Nach Album suchen
+    """
+    client = settings.XMMS2_CLIENT
+
+    artist = request.POST.get('artist')
+    album = request.POST.get('album')
+    album = "*%s*" % album
+    album_coll = collections.Match(field="album", value=album)
+
+    template = loader.get_template("dj/albumlist.html")
+    context = Context({
+        'selected_artist': artist,
+        'albums': client.coll_query(['album'], album_coll),
+    })
+    return HttpResponse(template.render(context))
+
+
+def search_title(request):
+    """Nach Titel suchen
+    """
+    client = settings.XMMS2_CLIENT
+
+    title = request.POST.get('title')
+    title = "*%s*" % title
+    title_coll = collections.Match(field="title", value=title)
+
+    template = loader.get_template("dj/titlelist.html")
+    context = Context({
+        'titles': client.coll_query(['title', 'id'], title_coll),
+    })
+    return HttpResponse(template.render(context))
