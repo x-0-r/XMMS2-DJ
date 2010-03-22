@@ -162,3 +162,20 @@ class XmmsClient(object):
         result = self.client.playlist_create(playlist)
         result.wait()
         return result.value()
+
+    def playlist_move(self, cur_pos, new_pos):
+        """Einen Eintrag in der Playlist verschieben
+           
+           @param cur_pos Die aktuelle Position des Eintrags
+           @param new_pos Die neue Position des Eintrags
+        """
+        max_pos = len(self.list())-1
+        if new_pos > max_pos or new_pos < 0 or cur_pos < 0 or cur_pos > max_pos:
+            print "Failed to move from %d to %d" % (cur_pos, new_pos)
+            return False
+
+        print "moving from %d to %d" % (cur_pos, new_pos)
+
+        result = self.client.playlist_move(cur_pos, new_pos)
+        result.wait()
+        return result.value()

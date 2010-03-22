@@ -20,3 +20,11 @@ das Einrichten eines Webservers wäre etwas viel verlang, nur um Musik zu
 hören^^).
 Viel mehr ist diese Anwendung für kleine Musik-Server im Hausgebrauch gedacht,
 die über eine Weboberfläche gesteuert werden sollen.
+
+Anmerkungen
+-----------
+Das Webfrontend setzt auf YAML und mootools (mit Clientcide Plugins) auf. Es
+wäre daher nicht schlecht, vor Änderungen daran, die entsprechende
+Dokumentation zu lesen.
+Für YAML siehe http://www.yaml.de
+Für mootools siehe http://mootools.net/ und http://www.clientcide.com/
