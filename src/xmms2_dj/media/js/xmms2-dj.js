@@ -10,7 +10,10 @@ window.addEvent('domready', function() {
 function updateStatus(url) {
 	new Request.HTML({
 		url: url,
-		update: $('player_status'),
+		onSuccess: function(html) {
+			$('player_status').set('text', '');
+			$('player_status').adopt(html);
+		}
 	}).send();
 }
 
@@ -19,9 +22,16 @@ function getPlaylistList(url) {
 	waiter.start();
 	new Request.HTML({
 		url:url,
-		update: $('playlist_list'),
+		onSuccess: function(html) {
+			$('playlist_list').set('text', '');
+			$('playlist_list').adopt(html);
+			waiter.stop();
+		},
+		onFailure: function() {
+			$('playlist_list').set('text', 'The request failed.');
+			waiter.stop();
+		}
 	}).send();
-	waiter.stop();
 }
 
 function getPlaylist(url) {
@@ -29,9 +39,17 @@ function getPlaylist(url) {
 	waiter.start();
 	new Request.HTML({
 		url: url,
+		onSuccess: function(html) {
+			$('playlist').set('text', '');
+			$('playlist').adopt(html);
+			waiter.stop();
+		},
+		onFailure: function() {
+			$('playlist').set('text', 'The request failed.');
+			waiter.stop();
+		},
 		update: $('playlist'),
 	}).send();
-	waiter.stop();
 }
 
 function loadPlaylist (select) {
@@ -47,10 +65,17 @@ function createPlaylist (playlist_url, playlist_list_url) {
 	new Request.HTML({
 		url: playlist_url,
 		method: "post",
-		update: $('playlist'),
+		onSuccess: function(html) {
+			$('playlist').set('text', '');
+			$('playlist').adopt(html);
+			waiter.stop();
+		},
+		onFailure: function() {
+			$('playlist').set('text', 'The request failed.');
+			waiter.stop();
+		},
 		data: "playlist="+name
 	}).send();
-	waiter.stop();
 
 	getPlaylistList(playlist_list_url);
 }
@@ -66,6 +91,7 @@ function getTitles (url) {
 			waiter.stop();
 		},
 		onFailure: function () {
+			$('titles').set('text', 'The request failed.');
 			waiter.stop();
 		}
 	}).send();
@@ -79,9 +105,13 @@ function getAlbum (url) {
 		onSuccess: function(html) {
 			$('albums').set('text', '');
 			$('albums').adopt(html);
+			waiter.stop();
+		},
+		onFailure: function() {
+			$('albums').set('text', 'The request failed.');
+			waiter.stop();
 		}
 	}).send();
-	waiter.stop();
 }
 
 var t;

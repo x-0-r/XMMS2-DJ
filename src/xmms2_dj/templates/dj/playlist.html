@@ -13,6 +13,12 @@
 	<a href="javascript: getPlaylist('{% url dj_remove id=entry.id %}');">
 		(-)
 	</a>
+	<a href="javascript: getPlaylist('{% url dj_move_entry_down pos=entry.id %}');">
+		(&#8659;)
+	</a>
+	<a href="javascript: getPlaylist('{% url dj_move_entry_up pos=entry.id %}');">
+		(&#8657;)
+	</a>
 	</li>
 	{% endfor %}
 </ul>

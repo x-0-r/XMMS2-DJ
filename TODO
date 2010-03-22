@@ -3,7 +3,6 @@ TODO:
 
 - Verwenden des Strings "Alle" in apps.dj.views vermeiden
 - Playlists verwalten (rename, löschen, speichern, neu, export als XML, etc.)
-- Verschieben von Titeln in der Playlist
 - Drag & Drop Funktion in Playlist
 - Detailinfos zu Songs
 - Verwalten von Radio-Streams

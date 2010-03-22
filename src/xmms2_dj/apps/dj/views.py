@@ -382,3 +382,27 @@ def search_title(request):
         'titles': client.coll_query(['title', 'id'], title_coll),
     })
     return HttpResponse(template.render(context))
+
+
+def move_entry_down(request, pos):
+    """Einen Eintrag in der Playlist nach unten schieben
+
+       @param pos Positon des Eintrags in der Playlist
+    """
+    client = settings.XMMS2_CLIENT
+    pos = int(pos)
+    client.playlist_move(pos, pos+1)
+
+    return get_playlist(request)
+
+
+def move_entry_up(request, pos):
+    """Einen Eintrag in der Playlist nach oben schieben
+
+       @param pos Position des Eintrags in der Playlist
+    """
+    client = settings.XMMS2_CLIENT
+    pos = int(pos)
+    client.playlist_move(pos, pos-1)
+
+    return get_playlist(request)
