@@ -406,3 +406,17 @@ def move_entry_up(request, pos):
     client.playlist_move(pos, pos-1)
 
     return get_playlist(request)
+
+def show_info(request, id):
+    """Detailinfos über einen Song anzeigen
+
+       @param id ID des Songs
+    """
+    client = settings.XMMS2_CLIENT
+    id = int(id)
+
+    template = loader.get_template("dj/titleinfo.html")
+    context = RequestContext(request, {
+        'infos': client.get_info(id),
+    })
+    return HttpResponse(template.render(context))

@@ -75,7 +75,8 @@ class XmmsClient(object):
     def list(self):
         """Playlist auflisten
 
-           @return ein Array aus Tupeln z.B.: [(1, 'Machine Head', 'Imperium'),]
+           @return ein Array aus Dictionaries z.B.:
+               [{'id': 1, 'artist': 'Machine Head', 'title': Imperium', 'duration': 450000},]
         """
         result = self.client.playlist_list_entries()
         result.wait()
@@ -177,5 +178,14 @@ class XmmsClient(object):
         print "moving from %d to %d" % (cur_pos, new_pos)
 
         result = self.client.playlist_move(cur_pos, new_pos)
+        result.wait()
+        return result.value()
+
+    def get_info(self, id):
+        """Infos über einen Titel liefern
+
+           @param id ID des Tittels
+        """
+        result = self.client.medialib_get_info(id)
         result.wait()
         return result.value()

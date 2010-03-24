@@ -181,3 +181,8 @@ function searchTitle (url) {
 		data: "title="+searchstring
 	}).send();
 }
+
+function openPopup(url, title) {
+	popup = window.open(url, title, "width=400,height=460,left=100,top=100");
+	popup.focus();
+}

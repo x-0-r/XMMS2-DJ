@@ -22,3 +22,13 @@ def timespan(value):
     seconds = (int(value) / 1000) % 60
 
     return "%02d:%02d:%02d" % (hours, minutes, seconds)
+
+@register.filter
+def datefromtimestamp(value, arg=None):
+    """Formatiert einen Unix-Timestamp
+    """
+    from datetime import datetime
+    from django.template.defaultfilters import date
+
+    value = datetime.fromtimestamp(value)
+    return date(value, arg)

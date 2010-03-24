@@ -25,4 +25,5 @@ urlpatterns = patterns('',
                        url(r'^search/artist/$', views.search_artist, name="dj_search_artist"),
                        url(r'^search/album/$', views.search_album, name="dj_search_album"),
                        url(r'^search/title/$', views.search_title, name="dj_search_title"),
+                       url(r'^info/title/(?P<id>\d+)/$', views.show_info, name="dj_show_info"),
                       )
