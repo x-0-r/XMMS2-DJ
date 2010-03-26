@@ -181,6 +181,13 @@ class XmmsClient(object):
         result.wait()
         return result.value()
 
+    def playlist_shuffle(self):
+        """Die Playlist shuffeln
+        """
+        result = self.client.playlist_shuffle()
+        result.wait()
+        return result.value()
+
     def get_info(self, id):
         """Infos über einen Titel liefern
 

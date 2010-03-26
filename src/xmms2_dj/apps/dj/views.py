@@ -384,6 +384,15 @@ def search_title(request):
     return HttpResponse(template.render(context))
 
 
+def shuffle_playlist(request):
+    """Die Playlist shufflen
+    """
+    client = settings.XMMS2_CLIENT
+    client.playlist_shuffle()
+
+    return get_playlist(request)
+
+
 def move_entry_down(request, pos):
     """Einen Eintrag in der Playlist nach unten schieben
 

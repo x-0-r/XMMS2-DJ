@@ -120,6 +120,7 @@ window.addEvent('domready', function() {
 								Playlist
 								<a href="javascript: getPlaylist('{% url dj_clear_playlist %}');">clear</a>
 								<a href="#">export</a>
+								<a href="javascript: getPlaylist('{% url dj_shuffle_playlist %}');">shuffle</a>
 							</h2>
 							{% block base %}
 							{% endblock %}
