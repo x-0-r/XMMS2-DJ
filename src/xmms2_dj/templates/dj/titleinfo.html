@@ -1,0 +1,31 @@
+{% load dj_extras %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+		<title>XMMS2 DJ</title>
+		<!-- (de) Fügen Sie hier Ihre Meta-Daten ein -->
+
+		<link href="{{ MEDIA_URL }}css/layout.css" rel="stylesheet" type="text/css"/>
+		<!--[if lte IE 7]>
+		<link href="{{ MEDIA_URL }}css/patches/patch_layout_draft.css" rel="stylesheet" type="text/css" />
+		<![endif]-->
+	</head>
+	<body>
+		<h1>Title-Infos</h2>
+		<h2>{{ infos.artist }} - {{ infos.title }}</h2>
+		<table>
+			<tr><td>URL</td><td>{{ infos.url }}</td></tr>
+			<tr><td>Artist</td><td>{{ infos.artist }}</td></tr>
+			<tr><td>Album</td><td>{{ infos.album }}</td></tr>
+			<tr><td>Title</td><td>{{ infos.title }}</td></tr>
+			<tr><td>Comment</td><td>{{ infos.comment }}</td></tr>
+			<tr><td>Duration</td><td>{{ infos.duration|timespan }}</td></tr>
+			<tr><td>Size</td><td>{{ infos.size }}</td></tr>
+			<tr><td>Samplerate</td><td>{{ infos.samplerate }}</td></tr>
+			<tr><td>Times played</td><td>{{ infos.timesplayed }}</td></tr>
+			<tr><td>Last time played</td><td>{{ infos.laststarted|datefromtimestamp }}</td></tr>
+		</table>
+	</body>
+</html>

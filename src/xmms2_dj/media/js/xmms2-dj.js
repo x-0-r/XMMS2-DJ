@@ -1,10 +1,35 @@
 Clientcide.setAssetLocation("/media/clientcide/");
 
-/*
 window.addEvent('domready', function() {
-	$('search_artist').addEvent('change', searchTimer('/search/artist/'));
+	playlistSortables = getPlaylistSortables();
 });
-*/
+
+
+function getPlaylistSortables() {
+	ul = $('playlist').getElement('ul');
+	return new Sortables(
+		ul,
+		{
+			onComplete: function(element, clone) {
+				ser = playlistSortables.serialize();
+				new Request.HTML({
+					url: 'move/',
+					method: "post",
+					onSuccess: function(html) {
+						$('playlist').set('text', '');
+						$('playlist').adopt(html);
+						ul = $('playlist').getElement('ul')
+						playlistSortables = getPlaylistSortables();
+					},
+					onFailure: function() {
+						$('playlist').set('text', 'The request failed.');
+					},
+					data: "items="+ser+"&item="+element.getProperty('id')
+				}).send();
+			}
+	});
+
+}
 
 
 function updateStatus(url) {
@@ -48,7 +73,6 @@ function getPlaylist(url) {
 			$('playlist').set('text', 'The request failed.');
 			waiter.stop();
 		},
-		update: $('playlist'),
 	}).send();
 }
 
@@ -180,4 +204,9 @@ function searchTitle (url) {
 		},
 		data: "title="+searchstring
 	}).send();
+}
+
+function openPopup(url, title) {
+	popup = window.open(url, title, "width=400,height=460,left=100,top=100");
+	popup.focus();
 }

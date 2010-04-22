@@ -5,7 +5,7 @@
 </span>
 <ul>
 	{% for entry in playlist %}
-	<li class="{% cycle 'emph' '' %}">
+	<li class="{% cycle 'emph' '' %}" id="pl_item_{{ entry.id }}">
 	<a href="javascript: updateStatus('{% url dj_jump id=entry.id %}');">
 		{{ entry.artist }} - {{ entry.title }}
 	</a>

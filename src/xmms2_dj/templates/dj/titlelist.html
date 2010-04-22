@@ -6,6 +6,9 @@
 	<a href="javascript: getPlaylist('{% url dj_add_title id=entry.id %}');">
 		add
 	</a>
+	<a href="javascript: openPopup('{% url dj_show_info id=entry.id %}', 'Info');">
+		(i)
+	</a>
 	</li>
 
 	{% endfor %}
