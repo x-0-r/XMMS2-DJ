@@ -78,6 +78,10 @@
   li { margin-left:0; line-height:1.5em; padding: 0; }
   li.emph { background: #eee; }
 
+  ul li:hover {
+	  background-color: #f3f781;
+  }
+
   dt { font-weight:bold; }
   dd { margin:0 0 1em 0.8em; }
 
