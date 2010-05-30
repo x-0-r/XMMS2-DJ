@@ -88,9 +88,9 @@ class XmmsClient(object):
             result.wait()
             info = result.value()
             title_list += [{'id': pl_id,
-                            'artist': info["artist"],
-                            'title': info["title"],
-                            'duration': info["duration"],
+                            'artist': info.get("artist"),
+                            'title': info.get("title"),
+                            'duration': info.get("duration"),
                            }]
             pl_id += 1
 
@@ -194,5 +194,76 @@ class XmmsClient(object):
            @param id ID des Tittels
         """
         result = self.client.medialib_get_info(id)
+        result.wait()
+        return result.value()
+
+    def volume_up(self, vol_add, channel=None):
+        """Lautstärke erhöhen
+           
+           @param vol_add Betrag, um den die Lautstärke erhöht werden soll
+           @param channel Kanal <'left'|'right'> der geändert werden soll
+
+           @return True bei Erfolg oder False falls die Läutstärke nicht geändert wurde
+        """
+        result = self.client.playback_volume_get()
+        result.wait()
+        curr_vol = result.value()
+        # curr_vol wird als dict zurück gegeben, das die Lautstärke für die
+        # Kanäle 'right' und 'left' enthält.
+        # Falls keine Lautstärke ermittelt werden konnte, enthält es einen
+        # String mit einer Fehlermeldung.
+        if not isinstance(volume, dict):
+            return False
+        
+        volume['right'] += vol_add 
+        volume['left']  += vol_add
+
+        if channel is None:
+            result = self.client.playback_volume_set('right', volume['right'])
+            result.wait()
+            result = self.client.playback_volume_set('left', volume['left'])
+            result.wait()
+        else:
+            result = self.client.playback_volume_set(channel, volume[channel])
+            result.wait()
+
+        return True
+
+    def volume_down(self, vol_dec, channel=None):
+        """Lautstärke senken
+
+           @param vol_dec Betrag, um den die Lautstärke gesenkt werden soll
+           @param channel Kanal <'left'|'right'> dessen Lautsärke geändert werden soll
+
+           @return True bei Erfolg oder False falls die Läutstärke nicht geändert wurde
+        """
+        result = self.client.playback_volume_get()
+        result.wait()
+        volume = result.value()
+        # siehe volume_up(..)
+        if not isinstance(volume, dict):
+            return False
+
+        volume['left']  -= vol_dec
+        volume['right'] -= vol_dec
+
+        if channel is None:
+            result = self.client.playback_volume_set('right', volume['right'])
+            result.wait()
+            result = self.client.playback_volume_set('left', volume['left'])
+            result.wait()
+        else:
+            result = self.client.playback_volume_set(channel, volume[channel])
+            result.wait()
+
+        return True
+
+    def volume_get(self):
+        """Lautstärke ermitteln
+        
+           @return die aktuelle Lautstärke als dict
+                   z.B.: {'left': 100, 'right': 100}
+        """
+        result = self.client.playback_volume_get()
         result.wait()
         return result.value()

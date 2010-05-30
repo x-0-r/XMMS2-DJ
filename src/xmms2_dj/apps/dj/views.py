@@ -39,7 +39,10 @@ def common(request, client=settings.XMMS2_CLIENT, artist='Alle', album='Alle'):
     playlist = client.list()
     playtime = 0
     for entry in playlist:
-        playtime += entry['duration']
+        try:
+            playtime += entry.get('duration')
+        except TypeError:
+            pass
 
     template = loader.get_template('dj/index.html')
     context = RequestContext(request, {
@@ -63,14 +66,13 @@ def index(request):
     return common(request)    
 
 
-def status(request):
+def status(request, client=settings.XMMS2_CLIENT):
     """Updaten des Status des XMMS-Client
     """
-    client = settings.XMMS2_CLIENT
-
     template = loader.get_template('dj/player_status.html')
     context = Context({
         'current': client.current(),
+        'volume': client.volume_get(),
     })
     return HttpResponse(template.render(context))
 
@@ -123,6 +125,7 @@ def prev(request):
 
     return status(request)
 
+
 def get_playlist(request):
     """Liefert die aktuelle Playlist aus
     """
@@ -131,7 +134,10 @@ def get_playlist(request):
     playlist = client.list()
     playtime = 0
     for entry in playlist:
-        playtime += entry['duration']
+        try:
+            playtime += entry.get('duration')
+        except TypeError:
+            pass
 
     template = loader.get_template('dj/playlist.html')
     context = RequestContext(request, {
@@ -304,8 +310,6 @@ def load_playlist(request, playlist):
     playlist = smart_str(unquote_plus(playlist))
     client.playlist_load(playlist)
 
-    print playlist
-
     return get_playlist(request)
 
 
@@ -393,6 +397,27 @@ def shuffle_playlist(request):
     return get_playlist(request)
 
 
+def move_entry(request):
+    """Einen Eintrag in der Playlist verschieben
+    """
+    client = settings.XMMS2_CLIENT
+
+    items = request.POST.get('items').split(',')
+    item = request.POST.get('item')
+
+    old_pos = int(item.lstrip('pl_item'))
+    new_pos = 0
+    # neue Position in der Playlist suchen
+    for i, entry in enumerate(items):
+        if item == entry:
+            new_pos = i
+            break
+
+    client.playlist_move(old_pos, new_pos)
+
+    return get_playlist(request)
+
+
 def move_entry_down(request, pos):
     """Einen Eintrag in der Playlist nach unten schieben
 
@@ -416,6 +441,7 @@ def move_entry_up(request, pos):
 
     return get_playlist(request)
 
+
 def show_info(request, id):
     """Detailinfos über einen Song anzeigen
 
@@ -429,3 +455,16 @@ def show_info(request, id):
         'infos': client.get_info(id),
     })
     return HttpResponse(template.render(context))
+
+
+def volume_up(request, vol_add):
+    """Lautstärke erhöhen"""
+    client = settings.XMMS2_CLIENT
+    vol_add = int(vol_add)
+
+    template = loader.get_template("dj/player_status.html")
+    context = Context({
+        'current': client.current(),
+        'volume': client.volume_get(),
+    })
+    return status()

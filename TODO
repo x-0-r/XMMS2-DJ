@@ -3,8 +3,8 @@ TODO:
 
 - Verwenden des Strings "Alle" in apps.dj.views vermeiden
 - Playlists verwalten (rename, löschen, speichern, neu, export als XML, etc.)
-- Drag & Drop Funktion in Playlist
 - Verbesserungen an Detailinfos zu Songs (z.B.: lastplayed "never" statt 1970)
 - Verwalten von Radio-Streams
 - Beachten von Albumartist-Tag
 - Fehler bei ' im Artist/Album-Namen
+- BUG: Auflisten von Titeln ohne Artist-Tag

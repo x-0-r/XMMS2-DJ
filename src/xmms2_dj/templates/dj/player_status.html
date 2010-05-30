@@ -1,4 +1,10 @@
-<p>
-Now Playing: <br />
-{{ current.1 }} - {{ current.2 }}
-</p>
+<div style="float:left; border-right: 1px solid yellow; padding:5px;">
+	Now Playing: <br />
+	{{ current.1 }} - {{ current.2 }}<br />
+</div>
+<div style="padding: 5px;">
+	Volume:<br />
+	left: {{ volume.left }} <br />
+	right: {{ volume.right }} 
+</div>
+<p style="clear: both;"></p>
