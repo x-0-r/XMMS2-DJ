@@ -24,14 +24,26 @@
 			<tr><td>Duration</td><td>{{ infos.duration|timespan }}</td></tr>
 			<tr><td>Size</td><td>{{ infos.size }}</td></tr>
 			<tr><td>Samplerate</td><td>{{ infos.samplerate }}</td></tr>
-			<tr><td>Times played</td><td>
-					{% ifequal infos.timesplayed 0 %}
-						never
+			<tr>
+				<td>Times played</td>
+				<td>
+					{% ifequal infos.timesplayed -1 %}
+						0
 					{% else %}
 						{{ infos.timesplayed }}
 					{% endifequal %}
-			</td></tr>
-			<tr><td>Last time played</td><td>{{ infos.laststarted|datefromtimestamp }}</td></tr>
+				</td>
+			</tr>
+			<tr>
+				<td>Last time played</td>
+				<td>
+					{% ifequal infos.laststarted -1 %}
+						never
+					{% else %}
+						{{ infos.laststarted|datefromtimestamp }}
+					{% endifequal %}
+				</td>
+			</tr>
 		</table>
 	</body>
 </html>

@@ -68,6 +68,7 @@ function getPlaylist(url) {
 			$('playlist').set('text', '');
 			$('playlist').adopt(html);
 			waiter.stop();
+			playlistSortables = getPlaylistSortables();
 		},
 		onFailure: function() {
 			$('playlist').set('text', 'The request failed.');
