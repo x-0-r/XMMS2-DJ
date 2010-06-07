@@ -6,10 +6,7 @@ Beinhaltet Helfer-Klassen für die Steuerung des XMMS2 Servers
 
 import xmmsclient
 import xmmsclient.collections as coll
-
-import sys
-import os
-
+import sys import os 
 class XmmsClient(object):
     """Ein XMMS2 Client Wrapper
     """
@@ -191,7 +188,7 @@ class XmmsClient(object):
     def get_info(self, id):
         """Infos über einen Titel liefern
 
-           @param id ID des Tittels
+           @param id ID des Titels
         """
         result = self.client.medialib_get_info(id)
         result.wait()
