@@ -1,0 +1,11 @@
+{% for entry in titles %}
+<li class="{% cycle 'highlight' '' %}">
+	{{ entry.title }}
+	<a class="add" title="add" href="{% url dj_add_title id=entry.id %}">
+		<img src="{{ MEDIA_URL }}img/add.png" />
+	</a>
+	<a class="info" href="{% url dj_show_info id=entry.id %}">
+		(i)
+	</a>
+</li>
+{% endfor %}

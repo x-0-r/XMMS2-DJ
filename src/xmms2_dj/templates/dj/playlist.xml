@@ -1,0 +1,11 @@
+<?xml version="1.0" ?>
+<playlist name="">
+	<titles>
+		{% for title in playlist %}
+		<title pos="{{ title.id }}" id="{{ title.mlibid }}">
+			<artist>{{ title.artist }}</artist>
+			<name>{{ title.title }}</name>
+		</title>
+		{% endfor %}
+	</titles>
+</playlist>

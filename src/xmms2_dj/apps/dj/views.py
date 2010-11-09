@@ -15,6 +15,20 @@ import xmms2
 from xmmsclient import collections
 
 
+def iphone(request):
+    """Rendert eine Seite für das iPhone Interface
+    """
+    client = settings.XMMS2_CLIENT
+
+    artist_coll = collections.Universe()
+
+    template = loader.get_template('dj/iphone/index.html')
+    context = RequestContext(request, {
+        'artists': client.coll_query(['artist'], artist_coll),
+    })
+    return HttpResponse(template.render(context))
+
+
 def common(request, client=settings.XMMS2_CLIENT, artist='Alle', album='Alle'):
     """Rendert die Index-Seite
     
@@ -44,7 +58,7 @@ def common(request, client=settings.XMMS2_CLIENT, artist='Alle', album='Alle'):
         except TypeError:
             pass
 
-    template = loader.get_template('dj/index.html')
+    template = loader.get_template('concept/index.html')
     context = RequestContext(request, {
         'playlist_list': client.playlist_list(),
         'active_playlist': client.playlist_active(),
@@ -139,13 +153,24 @@ def get_playlist(request):
         except TypeError:
             pass
 
-    template = loader.get_template('dj/playlist.html')
+    template = loader.get_template('concept/playlist.html')
     context = RequestContext(request, {
         'playtime': playtime,
         'playlist': playlist,
     })
     return HttpResponse(template.render(context))
 
+
+def export_playlist(request):
+    """XML Export der Playlist
+    """
+    client = settings.XMMS2_CLIENT
+    playlist = client.list(with_mlibid=True)
+    template = loader.get_template('dj/playlist.xml')
+    context = RequestContext(request, {
+        'playlist': playlist,
+    })
+    return HttpResponse(template.render(context), mimetype='text/xml')
 
 def artist_add(request, artist):
     """Alle Titel eines Künstlers zur Playlist hinzufügen
@@ -232,7 +257,7 @@ def list_albums(request, artist="Alle"):
     else:
         artist_coll = collections.Universe()
 
-    template = loader.get_template('dj/albumlist.html')
+    template = loader.get_template('concept/albumlist.html')
     context = RequestContext(request, {
         'selected_artist': artist,
         'albums': client.coll_query(['album'], artist_coll),
@@ -268,7 +293,7 @@ def list_titles(request, artist="Alle", album="Alle"):
             collections.Universe()
         )
 
-    template = loader.get_template('dj/titlelist.html')
+    template = loader.get_template('concept/titlelist.html')
     context = RequestContext(request, {
         'selected_artist': artist,
         'albums': client.coll_query(['album'], artist_coll),

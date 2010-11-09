@@ -24,8 +24,12 @@ urlpatterns = patterns('',
                        url(r'^playlist/list/$', views.get_playlist_list, name="dj_list_playlists"),
                        url(r'^playlist/create/$', views.create_playlist, name="dj_create_playlist"),
                        url(r'^playlist/shuffle/$', views.shuffle_playlist, name="dj_shuffle_playlist"),
+                       url(r'^playlist/export/$', views.export_playlist, name="dj_export_playlist"),
                        url(r'^search/artist/$', views.search_artist, name="dj_search_artist"),
                        url(r'^search/album/$', views.search_album, name="dj_search_album"),
                        url(r'^search/title/$', views.search_title, name="dj_search_title"),
                        url(r'^info/title/(?P<id>\d+)/$', views.show_info, name="dj_show_info"),
+
+
+                       url(r'^iphone/$', views.iphone, name="dj_iphone"),
                       )

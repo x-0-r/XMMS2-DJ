@@ -1,0 +1,8 @@
+{% for entry in albums %}
+<li>
+<a class="view" href="{% url dj_list_titles artist=selected_artist album=entry.album %}">{{ entry.album }}</a>
+<a class="add" href="{% url dj_add_album album=entry.album artist=selected_artist %}" title="add"><img src="{{ MEDIA_URL }}img/add.png" /></a>
+<ul class="titles">
+</ul>
+</li>
+{% endfor %}

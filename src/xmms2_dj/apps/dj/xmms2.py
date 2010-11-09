@@ -6,7 +6,8 @@ Beinhaltet Helfer-Klassen für die Steuerung des XMMS2 Servers
 
 import xmmsclient
 import xmmsclient.collections as coll
-import sys import os 
+import sys
+import os 
 class XmmsClient(object):
     """Ein XMMS2 Client Wrapper
     """
@@ -69,7 +70,7 @@ class XmmsClient(object):
         result = self.client.playback_tickle()
         result.wait()
 
-    def list(self):
+    def list(self, with_mlibid=False):
         """Playlist auflisten
 
            @return ein Array aus Dictionaries z.B.:
@@ -84,11 +85,14 @@ class XmmsClient(object):
             result = self.client.medialib_get_info(id)
             result.wait()
             info = result.value()
-            title_list += [{'id': pl_id,
+            entry = {'id': pl_id,
                             'artist': info.get("artist"),
                             'title': info.get("title"),
                             'duration': info.get("duration"),
-                           }]
+                    }
+            if with_mlibid:
+                entry['mlibid'] = id
+            title_list += [entry,]
             pl_id += 1
 
         return title_list
