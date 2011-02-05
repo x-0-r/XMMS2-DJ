@@ -10,30 +10,8 @@
 		<link href="{{ MEDIA_URL }}css/conceptual.css" rel="stylesheet" type="text/css" />
 
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
-		{% comment %}
-		<script type="text/javascript" src="{{ MEDIA_URL }}js/mootools-1.2.5-core.js"></script>
-		<script type="text/javascript" src="{{ MEDIA_URL }}js/mootools-1.2.4.4-more.js"></script>
-		{% endcomment %}
 		<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.bpopup-0.4.1.min.js"></script>
 		<script type="text/javascript" src="{{ MEDIA_URL }}js/conceptual.js"></script>
-		<script type="text/javascript">
-			/*
-			window.addEvent('domready', function() {
-				vertSlide = new Fx.Slide('vertical_slide');
-				$('artist1').addEvent('click', function(e) {
-					e.stop();
-					vertSlide.toggle();
-				});
-			});
-			*/
-
-			function getAlbums (url, element) {
-				new Request.HTML({
-					url: url,
-					update: element,
-				}).send();
-			}
-		</script>
 	</head>
 	<body>
 		<div id="wrapper">
@@ -58,8 +36,14 @@
 								<h1>Search</h1>
 
 								<div>
-									<input style="background: none repeat scroll 0% 0% rgb(255, 255, 255); border-width: 1px; border-style: solid; border-color: rgb(204, 204, 204) rgb(153, 153, 153) rgb(153, 153, 153) rgb(204, 204, 204); color: rgb(0, 0, 0); font: 18px arial,sans-serif bold; height: 25px; margin: 0pt; padding: 5px 8px 0pt 6px; vertical-align: top; width: 80%;"  name="search" type="text" />
-									<span><a href="#">Artist</a><a style="margin: 0 10px;" href="#">Album</a><a href="#">Title</a></span>
+									<form action="{% url dj_search %}" method="post">
+										<input class="search-box"  name="search" type="text" />
+										<input id="search-button" class="search-button" type="submit" value="Suche" name="submit" />
+										<input type="radio" name="s-type" value="all">All</input>
+										<input type="radio" name="s-type" value="artist">Artist</input>
+										<input type="radio" name="s-type" value="album">Record</input>
+										<input type="radio" name="s-type" value="title">Title</input>
+									</form>
 								</div>
 
 								<ul id="media-list" class="artists">
@@ -70,76 +54,6 @@
 									</ul>
 									</li>
 									{% endfor %}
-
-									<!--
-									<li>
-									<h2 id="artist1">Arcade Fire</h2>
-									<ul id="vertical_slide" class="albums">
-										<li>
-										<h3>Neon Bible</h3>
-										<ul class="titles">
-											<li>Black Mirror</li>
-											<li>Keep the Car Running</li>
-											<li>Neon Bible</li>
-											<li>Intervention</li>
-											<li>Black Wave/Bad Vibrations</li>
-											<li>Ocean of Noise</li>
-											<li>The Well and the Lighthouse</li>
-											<li>(Antichrist Television Blues)</li>
-											<li>Windowsill</li>
-											<li>No Cars Go</li>
-											<li>My Body Is a Cage</li>
-										</ul>
-										</li>
-
-										<li>
-										<h3>The Suburbs</h3>
-										<ul class="titles">
-											<li>The Suburbs</li>
-											<li>Ready To Start</li>
-											<li>Modern Man</li>
-											<li>Rococo</li>
-											<li>Empty Room</li>
-											<li>City With No Children</li>
-											<li>Half Light I</li>
-											<li>Half Light II (No Celebration)</li>
-											<li>Suburban War</li>
-											<li>Month of May</li>
-											<li>Wasted Hours</li>
-											<li>Deep Blue</li>
-											<li>We Used to Wait</li>
-											<li>Sprawl I (Flatland)</li>
-											<li>Sprawl II (Mountains Beyond Mountains)</li>
-											<li>The Suburbs (Continued)</li>
-										</ul>
-										</li>
-									</ul>
-									</li>
-
-									<li>
-									<h2>At The Drive-In</h2>
-									<ul class="albums">
-										<li>
-										<h3>Acrobatic Tenement</h3>
-										<ul>
-											<li>StarSlight</li>
-											<li>Schaffino</li>
-											<li>Ebroglio</li>
-											<li>Initiation</li>
-											<li>Communication drive - in</li>
-											<li>Skips on the record</li>
-											<li>Paid vacation time</li>
-											<li>Ticklish</li>
-											<li>Blue tag</li>
-											<li>Coating of arms</li>
-											<li>Porfirio diaz </li>
-										</ul>
-										</li>
-										<li><h3>Vaja</h3></li>
-										<li><h3>Relationship of Command</h3></li>
-									</ul>
-									</li>
-									-->
 								</ul>
 							</div>
 						</div>
@@ -147,6 +61,13 @@
 						<div id="col2">
 							<div id="col2_content" class="clearfix">
 								<h1>Playlist</h1>
+								<form action="#" method="post">
+									<select class="select-box" name="playlist">
+										{% for pl in playlist_list %} 
+										<option value="test">{{ pl }}</option>
+										{% endfor %}
+									</select>
+								</form>
 								<div id="playlist">
 									{% include "concept/playlist.html" %}
 								</div>

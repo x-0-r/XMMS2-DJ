@@ -11,7 +11,7 @@ body {
 	position: relative;
 	top: 0;
 	left: 0;
-	background: url("/media/img/background-tile.jpg") repeat-x top fixed;
+	background: url("/media/img/bg.jpg") top fixed;
 }
 
 .page-margins {
@@ -28,7 +28,7 @@ body {
 	left: 0;
 	margin: 0;
 	padding: 0;
-	background: url("/media/img/firefox.jpg") no-repeat center top fixed;
+	background: url("/media/img/notes.png") no-repeat center top fixed;
 }
 
 #header {
@@ -68,10 +68,10 @@ body {
 
 .main-content {
 	margin: 0;
-	padding: 0;
 	background-image: url("/media/img/bg2.png");
 	background-repeat: repeat-y;
-	padding: 20px 20px;
+	padding: 0 20px 20px 20px;
+	margin-top: -18px;
 }
 
 #col1 {
@@ -113,6 +113,42 @@ h1 {
 
 h2 {
 	font-size: 170%;
+}
+
+.search-button {
+	height: 32px;
+	background-color: #eee;
+	border-color: #ccc #999 #999 #ccc;
+	border-style: solid;
+	border-width: 1px;
+	margin: 0;
+	color: #000;
+	font: 15px Arial, sans-serif;
+	cursor: pointer;
+}
+
+.search-box {
+	background: none repeat scroll 0% 0% #fff;
+       	border-width: 1px; border-style: solid;
+       	border-color: #ccc #999 #999 #ccc;
+       	color: rgb(0, 0, 0);
+       	font: 18px arial,sans-serif bold;
+       	height: 25px;
+       	margin: 0pt;
+       	padding: 5px 8px 0pt 6px;
+       	vertical-align: top; width: 80%;
+}
+
+.select-box {
+	background: none repeat scroll 0% 0% #fff;
+       	border-width: 1px; border-style: solid;
+       	border-color: #ccc #999 #999 #ccc;
+       	color: rgb(0, 0, 0);
+       	font: 18px arial,sans-serif bold;
+       	height: 32px;
+       	margin: 0pt;
+       	padding: 5px 8px 0pt 6px;
+       	vertical-align: top; width: 80%;
 }
 
 ul.artists{

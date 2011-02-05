@@ -363,6 +363,36 @@ def get_playlist_list(request):
     return HttpResponse(template.render(context))
 
 
+def search(request):
+    """Universelle Suce mit post-Daten
+    """
+    client = settings.XMMS2_CLIENT
+
+    search = request.POST.get('search')
+    search = "*%s*" % search
+
+    coll = collections.Union(
+        collections.Match(field="artist", value=search),
+        collections.Match(field="album", value=search),
+        collections.Match(field="title", value=search)
+    )
+    d = client.coll_query(['artist', 'album', 'title', 'id'], coll)
+    t = {}
+    for entry in d:
+        if not entry['artist'] in t:
+            t[entry['artist']] = {}
+        if not entry['album'] in t[entry['artist']]:
+            t[entry['artist']][entry['album']] = {}
+        if not entry['title'] in t[entry['artist']][entry['album']]:
+            t[entry['artist']][entry['album']][entry['title']] = entry['id']
+
+    template = loader.get_template("concept/searchresult.html")
+    context = RequestContext(request, {
+        'result': t,
+    })
+    return HttpResponse(template.render(context))
+
+
 def search_artist(request):
     """Nach Künstler suchen
     """
@@ -482,6 +512,13 @@ def show_info(request, id):
     return HttpResponse(template.render(context))
 
 
+def volume_down(request, vol_add):
+    """Lautsärke verringern"""
+    client = settings.XMMS2_CLIENT
+    vol_add = int(vol_add)
+
+    return HttpResponse("volume")
+    
 def volume_up(request, vol_add):
     """Lautstärke erhöhen"""
     client = settings.XMMS2_CLIENT

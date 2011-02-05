@@ -30,7 +30,7 @@ function update_playlist(url) {
 
 }
 
-function record_list(list) {
+function record_list_ajax(list) {
 	// add handler to the add-link
 	list.find("a.add").click( function(e) {
 		e.preventDefault();
@@ -50,7 +50,7 @@ function record_list(list) {
 			update.load(url, function() {
 				update.slideDown();
 
-				title_list(update);
+				title_list_ajax(update);
 			});
 		} else {
 			update.slideToggle();
@@ -58,7 +58,7 @@ function record_list(list) {
 	});
 }
 
-function title_list(list) {
+function title_list_ajax(list) {
 	// add a handler to the add-link
 	list.find("a.add").click( function(e) {
 		e.preventDefault();
@@ -78,6 +78,36 @@ function title_list(list) {
 	});
 }
 
+function artist_list() {
+	$("#media-list>li>a").click( function(e) {
+		/** click handler for artist entries
+		 */
+		e.preventDefault();
+
+		var update = $(this).next("ul");
+		update.slideToggle();
+	});
+}
+
+function record_list(list) {
+	// add handler to the add-link
+	list.find("a.add").click( function(e) {
+		e.preventDefault();
+		var url = $(this).attr("href");
+
+		update_playlist(url);
+	});	
+
+	// add handler to the view-link
+	list.find("a.view").click( function(e) {
+		e.preventDefault();
+
+		update = $(this).siblings("ul.titles").first();
+		update.slideToggle();
+	});
+}
+
+
 
 $(document).ready(function() {
 		counter = 0;
@@ -94,7 +124,7 @@ $(document).ready(function() {
 				update.load(url, function() {
 					update.slideDown();
 
-					record_list(update);
+					record_list_ajax(update);
 				});
 			} else {
 				update.slideToggle();
@@ -107,6 +137,20 @@ $(document).ready(function() {
 
 			$.get(url);
 		});
+
+		$("#search-button").click( function(e) {
+			/** click handler for search button
+			 */
+			e.preventDefault();
+			var url = $(this).parents('form').attr('action');
+			var data = $(this).parents('form').serializeArray();
+			$("#media-list").load(url, data, function(){
+				artist_list();
+				record_list($('#media-list'));
+			});
+		});
+
+
 
 		update_playlist();
 });

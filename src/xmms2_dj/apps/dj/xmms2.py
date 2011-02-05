@@ -208,24 +208,20 @@ class XmmsClient(object):
         """
         result = self.client.playback_volume_get()
         result.wait()
-        curr_vol = result.value()
+        volume = result.value()
         # curr_vol wird als dict zurück gegeben, das die Lautstärke für die
         # Kanäle 'right' und 'left' enthält.
         # Falls keine Lautstärke ermittelt werden konnte, enthält es einen
         # String mit einer Fehlermeldung.
         if not isinstance(volume, dict):
             return False
-        
-        volume['right'] += vol_add 
-        volume['left']  += vol_add
 
         if channel is None:
-            result = self.client.playback_volume_set('right', volume['right'])
-            result.wait()
-            result = self.client.playback_volume_set('left', volume['left'])
-            result.wait()
+            for ch, value in volume.items():
+                result = self.client.playback_volume_set(ch, value + vol_add)
+                result.wait()
         else:
-            result = self.client.playback_volume_set(channel, volume[channel])
+            result = self.client.playback_volume_set(channel, volume[channel]+vol_add)
             result.wait()
 
         return True
@@ -245,14 +241,10 @@ class XmmsClient(object):
         if not isinstance(volume, dict):
             return False
 
-        volume['left']  -= vol_dec
-        volume['right'] -= vol_dec
-
         if channel is None:
-            result = self.client.playback_volume_set('right', volume['right'])
-            result.wait()
-            result = self.client.playback_volume_set('left', volume['left'])
-            result.wait()
+            for ch, value in volume.items():
+                result = self.client.playback_volume_set(ch, value - vol_dec)
+                result.wait()
         else:
             result = self.client.playback_volume_set(channel, volume[channel])
             result.wait()

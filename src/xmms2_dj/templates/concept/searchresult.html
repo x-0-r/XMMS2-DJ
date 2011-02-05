@@ -1,0 +1,26 @@
+{% for artist, artist_v in result.items %}
+	<li>
+	<a href="{% url dj_list_albums artist=artist|urlencode %}">{{ artist }}</a>
+	<ul id="albumlist-{{ forloop.counter }}" class="albums">
+		{% for album, album_v in artist_v.items %}
+		<li>
+		<a class="view" href="{% url dj_list_titles artist=artist album=album %}">{{ album }}</a>
+		<a class="add" href="{% url dj_add_album album=album artist=artist %}" title="add"><img src="{{ MEDIA_URL }}img/add.png" /></a>
+		<ul class="titles">
+			{% for title,id in album_v.items %}
+			<li class="{% cycle 'highlight' '' %}">
+			{{ title }}
+			<a class="add" title="add" href="{% url dj_add_title id=id %}">
+				<img src="{{ MEDIA_URL }}img/add.png" />
+			</a>
+			<a class="info" href="{% url dj_show_info id=id %}">
+				(i)
+			</a>
+			</li>
+			{% endfor %}
+		</ul>
+		</li>
+		{% endfor %}
+	</ul>
+	</li>
+{% endfor %}
