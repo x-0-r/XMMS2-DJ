@@ -9,7 +9,7 @@ import xmmsclient.collections as coll
 import sys
 import os 
 class XmmsClient(object):
-    """Ein XMMS2 Client Wrapper
+    """A wrapper to the xmmsclient
     """
     def __init__(self, name):
         self.client = xmmsclient.XMMS(name)
@@ -34,19 +34,19 @@ class XmmsClient(object):
             return None
     
     def play(self):
-        """Playback starten
+        """start playback
         """
         result = self.client.playback_start()
         result.wait()
 
     def stop(self):
-        """Playback stoppen
+        """stop playback
         """
         result = self.client.playback_stop()
         result.wait()
 
     def prev(self):
-        """Vorherigen Eintrag in Playlist abspielen
+        """Jump to previous playlist entry
         """
         result = self.client.playlist_set_next_rel(-1)
         result.wait()
@@ -54,7 +54,7 @@ class XmmsClient(object):
         result.wait()
 
     def next(self):
-        """Zum nächsten Eintrag in der Playlist springen
+        """Jump to the next playlist entry
         """
         result = self.client.playlist_set_next_rel(1)
         result.wait()
@@ -63,7 +63,9 @@ class XmmsClient(object):
 
     
     def jump(self, id):
-        """Zu einem Eintrag in der Playlist springen
+        """jump to specified playlist entry
+
+           @param id number of the playlist entry to jump to
         """
         result = self.client.playlist_set_next(id)
         result.wait()
@@ -71,9 +73,9 @@ class XmmsClient(object):
         result.wait()
 
     def list(self, with_mlibid=False):
-        """Playlist auflisten
+        """list playlist entries
 
-           @return ein Array aus Dictionaries z.B.:
+           @return an array of dicts for example:
                [{'id': 1, 'artist': 'Machine Head', 'title': Imperium', 'duration': 450000},]
         """
         result = self.client.playlist_list_entries()
@@ -98,78 +100,82 @@ class XmmsClient(object):
         return title_list
     
     def coll_query(self, keys, c = coll.Universe()):
-        """Eintraginfos aus einer Collection abrufen
-        Dabei ist keys eine liste
-        Zurückgegeben wird eine Liste mit dictionarys
+        """Query a collection for media information
+           
+           @param keys list of keys which the result should include
+           @return list of dicts
         """
         result = self.client.coll_query_infos(c, keys)
         result.wait()
         return result.value()
 
     def playlist_add_id(self, id):
-        """Eine Medialib-ID zur Playlist hinzufügen"""
+        """Add a medialib ID to the playlist"""
         result = self.client.playlist_add_id(id)
         result.wait()
         return result.value()
 
     def playlist_add_collection(self, collection):
-        """Alle Einträge einer Collection zur Playlist hinzufügen"""
+        """Add all entries in a collection to the playlist"""
         result = self.client.playlist_add_collection(collection)
         result.wait()
         return result.value()
 
     def playlist_remove_id(self, id):
-        """Einen Eintrag aus der aktuellen Playlist entfernen"""
+        """Remove an entry from the active playlist"""
         result = self.client.playlist_remove_entry(id)
         result.wait()
         return result.value()
 
     def playlist_clear(self):
-        """Die aktuelle Playlist leeren"""
+        """Remove all entries from the active playlist"""
         result = self.client.playlist_clear()
         result.wait()
         return result.value()
 
     def playlist_list(self):
-        """Playlisten auflisten"""
+        """List all playlists"""
         result = self.client.playlist_list()
         result.wait()
         list = []
         for entry in result.value():
-            # laut Client-Konvention dürfen Listen, die mit '_' beginnen für
-            # Benutzer nicht sichtbar sein
+            # by the xmms client conventions, lists starting with an underscore
+            # may not be visible to users.
             if not entry.startswith('_'):
                 list += [entry,]
 
         return list
 
     def playlist_active(self):
-        """Gibt den Namen der aktiven Playlist zurück"""
+        """Return the name of the active playlist"""
         result = self.client.playlist_current_active()
         result.wait()
         return result.value()
 
     def playlist_load(self, playlist):
-        """Lädt die angegebene Playliste"""
+        """Load the specified playlist
+           
+           @param playlist name of the playlist as string
+        """
         result = self.client.playlist_load(playlist)
         result.wait()
         return result.value()
 
 
     def playlist_create(self, playlist):
-        """Erstellt eine neue Playlist
+        """Create a ne playlist with the given name
            
-           @param playlist Name der Playlist
+           @param playlist name of the playlist
         """
         result = self.client.playlist_create(playlist)
         result.wait()
         return result.value()
 
     def playlist_move(self, cur_pos, new_pos):
-        """Einen Eintrag in der Playlist verschieben
+        """Move a playlist entry to a new position
            
-           @param cur_pos Die aktuelle Position des Eintrags
-           @param new_pos Die neue Position des Eintrags
+           @param cur_pos the current position of the entry
+           @param new_pos the new position of the entry
         """
         max_pos = len(self.list())-1
         if new_pos > max_pos or new_pos < 0 or cur_pos < 0 or cur_pos > max_pos:
@@ -183,28 +189,28 @@ class XmmsClient(object):
         return result.value()
 
     def playlist_shuffle(self):
-        """Die Playlist shuffeln
+        """Shuffle the active playlist
         """
         result = self.client.playlist_shuffle()
         result.wait()
         return result.value()
 
     def get_info(self, id):
-        """Infos über einen Titel liefern
+        """Return information on a title
 
-           @param id ID des Titels
+           @param id title id
         """
         result = self.client.medialib_get_info(id)
         result.wait()
         return result.value()
 
     def volume_up(self, vol_add, channel=None):
-        """Lautstärke erhöhen
+        """Rise volume
            
-           @param vol_add Betrag, um den die Lautstärke erhöht werden soll
-           @param channel Kanal <'left'|'right'> der geändert werden soll
+           @param vol_add Amount, the volume should be increased
+           @param channel Channel <'left'|'right'> which should be modified
 
-           @return True bei Erfolg oder False falls die Läutstärke nicht geändert wurde
+           @return <code>True</code> on success, otherwise <code>False</code>
         """
         result = self.client.playback_volume_get()
         result.wait()
@@ -227,12 +233,12 @@ class XmmsClient(object):
         return True
 
     def volume_down(self, vol_dec, channel=None):
-        """Lautstärke senken
+        """Decrease volume
 
-           @param vol_dec Betrag, um den die Lautstärke gesenkt werden soll
-           @param channel Kanal <'left'|'right'> dessen Lautsärke geändert werden soll
+           @param vol_dec Amount, by which the volume should be decreased
+           @param channel Channel <'left'|'right'> which should be modified
 
-           @return True bei Erfolg oder False falls die Läutstärke nicht geändert wurde
+           @return <code>True</code> on success, otherwise <code>False</code>
         """
         result = self.client.playback_volume_get()
         result.wait()
@@ -252,10 +258,10 @@ class XmmsClient(object):
         return True
 
     def volume_get(self):
-        """Lautstärke ermitteln
+        """Get volume
         
-           @return die aktuelle Lautstärke als dict
-                   z.B.: {'left': 100, 'right': 100}
+           @return the current volume, for example
+                   {'left': 100, 'right': 100}
         """
         result = self.client.playback_volume_get()
         result.wait()
