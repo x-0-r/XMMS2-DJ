@@ -165,6 +165,13 @@ class XmmsClient(object):
         result.wait()
         return result.value()
 
+    def playlist_remove(self, playlist):
+        """Löscht die aktuelle Playlist
+        """
+        result = self.client.playlist_remove(playlist)
+        result.wait()
+        return result.value();
+
     def playlist_move(self, cur_pos, new_pos):
         """Einen Eintrag in der Playlist verschieben
            

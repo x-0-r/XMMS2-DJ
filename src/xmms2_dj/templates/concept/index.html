@@ -19,52 +19,67 @@
 				<div class="page">
 					<div id="header">
 						<div id="player-controls">
-							<a href="{% url dj_play %}"><img alt="play" border="0" src="{{ MEDIA_URL }}img/play.png" /></a>
-							<a href="{% url dj_stop %}"><img alt="pause" border="0" src="{{ MEDIA_URL }}img/pause.png" /></a>
-							<a href="{% url dj_previous %}"><img alt="previus" border="0" src="{{ MEDIA_URL }}img/prev.png" /></a>
-							<a href="{% url dj_next %}"><img alt="next" border="0" src="{{ MEDIA_URL }}img/next.png" /></a>
-						</div>
-					</div>
-
-					<div id="main">
-						<div class="main-head">
-							<h1>XMMS2 DJ</h1>
-						</div>
-						<div class="main-content">
-						<div id="col1">
-							<div id="col1_content">
-								<h1>Search</h1>
-
-								<div>
-									<form action="{% url dj_search %}" method="post">
-										<input class="search-box"  name="search" type="text" />
-										<input id="search-button" class="search-button" type="submit" value="Suche" name="submit" />
-										<input type="radio" name="s-type" value="all">All</input>
-										<input type="radio" name="s-type" value="artist">Artist</input>
-										<input type="radio" name="s-type" value="album">Record</input>
-										<input type="radio" name="s-type" value="title">Title</input>
-									</form>
-								</div>
-
-								<ul id="media-list" class="artists">
-									{% for entry in artists %}
-									<li>
-									<a href="{% url dj_list_albums artist=entry.artist|urlencode %}">{{ entry.artist }}</a>
-									<ul id="albumlist-{{ forloop.counter }}" class="albums">
-									</ul>
-									</li>
-									{% endfor %}
-								</ul>
+							<ul>
+								<li><a href="{% url dj_play %}"><img alt="play" src="{{ MEDIA_URL }}img/play.png" /></a></li>
+								<li><a href="{% url dj_stop %}"><img alt="pause" src="{{ MEDIA_URL }}img/pause.png" /></a></li>
+								<li><a href="{% url dj_previous %}"><img alt="previus" src="{{ MEDIA_URL }}img/prev.png" /></a></li>
+								<li><a href="{% url dj_next %}"><img alt="next" src="{{ MEDIA_URL }}img/next.png" /></a></li>
+								<li><a href="{% url dj_volume_down vol_add=10 %}"><img alt="volume down" src="{{ MEDIA_URL}}img/volume_down.png" /></a></li>
+								<li style="margin-left:0;"><div class="volume">100</div></li>
+								<li style="margin-left:0;"><a href="{% url dj_volume_up vol_add=10 %}"><img alt="volume up" src="{{ MEDIA_URL}}img/volume_up.png" /></a></li>
+							</ul>
 							</div>
 						</div>
 
-						<div id="col2">
-							<div id="col2_content" class="clearfix">
-								<h1>Playlist</h1>
-								<form action="#" method="post">
-									<select class="select-box" name="playlist">
+						<div id="main">
+							<div class="main-head">
+								<h1>XMMS2 DJ</h1>
+							</div>
+							<div class="main-content">
+							<div id="col1">
+								<div id="col1_content">
+									<h1>Search</h1>
+
+									<form action="{% url dj_search %}" method="post">
+										<div>
+											<input class="search-box"  name="search" type="text" /><a style="margin-left: -15px; font-weight: bold; text-decoration:none; color: #999;" title="clear search" href="#">X</a>
+											<input id="search-button" class="search-button" type="submit" value="Suche" name="submit" /><br/>
+											<input type="radio" name="search-type" value="all" checked="checked" />All
+											<input type="radio" name="search-type" value="artist" />Artist
+											<input type="radio" name="search-type" value="album" />Record
+											<input type="radio" name="search-type" value="title" />Title
+										</div>
+									</form>
+
+									<ul id="media-list" class="artists">
+										{% for entry in artists %}
+										<li>
+										<a href="{% url dj_list_albums artist=entry.artist|urlencode %}">{{ entry.artist }}</a>
+										<ul id="albumlist-{{ forloop.counter }}" class="albums">
+										</ul>
+										</li>
+										{% endfor %}
+									</ul>
+								</div>
+							</div>
+
+							<div id="col2">
+								<div id="col2_content" class="clearfix">
+									<h1>Playlist <span class="playlist-meta">
+											<a id="new-playlist" href="{% url dj_create_playlist %}">new</a>
+											<a id="remove-playlist" href="{% url dj_remove_playlist %}">remove</a>
+									</span></h1>
+									<form id="form-create-playlist" action="{% url dj_create_playlist %}" method="post">
+										<p>
+											<input style="width:70%; float:left;" type="text" name="playlist" />
+											<input style="width:25%" type="submit" value="Create" />
+										</p>
+									</form>
+
+								<form action="{% url dj_list_playlists %}" method="post">
+									<select id="playlist-select" class="select-box" name="playlist">
 										{% for pl in playlist_list %} 
-										<option value="test">{{ pl }}</option>
+										<option value="{% url dj_load_playlist playlist=pl %}">{{ pl }}</option>
 										{% endfor %}
 									</select>
 								</form>

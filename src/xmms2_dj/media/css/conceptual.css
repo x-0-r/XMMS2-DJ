@@ -2,6 +2,11 @@ html * {
        	font-size: 100.01%;
 }
 
+html {
+	margin: 0;
+	padding: 0;
+}
+
 body {
 	font-size: 85.00%;
 	font-family: Arial, Helvetica, sans-serif;
@@ -12,6 +17,10 @@ body {
 	top: 0;
 	left: 0;
 	background: url("/media/img/bg.jpg") top fixed;
+}
+
+a>img {
+	border: 0;
 }
 
 .page-margins {
@@ -37,11 +46,37 @@ body {
 
 #player-controls {
 	position: fixed;
+	width: 400px;
+	height: 45px;
 	top: 0px;
-	margin: 0 auto;
-	width: 940px;
-	padding: 0px;
-	z-index: 1;
+	left: 50%;
+	margin-left: -200px;
+	padding: 2px 18px;
+	z-index: 100;
+	background: url("/media/img/controls-bg.png") no-repeat center top fixed;
+}
+
+#player-controls ul {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+
+#player-controls li {
+	margin-left: 4px;
+	padding: 0;
+	float: left;
+}
+
+div.volume {
+	background: url("/media/img/volume_bg.png") repeat-x;
+	float: left;
+	font-weight: bold;
+	font-size: 15px;
+	height: 30px;
+	padding: 7px 5px;
+	margin: 0;
+	color: #5c5846;
 }
 
 
@@ -64,14 +99,13 @@ body {
 	background-image: url("/media/img/gramo.png");
 	background-repeat: no-repeat;
 	padding-left: 40px;
+	margin-top: 18px;
 }
-
 .main-content {
 	margin: 0;
 	background-image: url("/media/img/bg2.png");
 	background-repeat: repeat-y;
 	padding: 0 20px 20px 20px;
-	margin-top: -18px;
 }
 
 #col1 {
@@ -109,10 +143,44 @@ body {
 
 h1 {
 	font-size: 200%;
+	margin-top: 0;
+}
+
+h1>span {
+	font-size: 70%;
+	display: none;
+}
+
+h1:hover > span {
+	display: inline;
 }
 
 h2 {
 	font-size: 170%;
+}
+
+input[type="text"] {
+	background: none repeat scroll 0% 0% #fff;
+       	border-width: 1px; border-style: solid;
+       	border-color: #ccc #999 #999 #ccc;
+       	color: rgb(0, 0, 0);
+       	font: 18px arial,sans-serif bold;
+       	height: 25px;
+       	margin: 0pt;
+       	padding: 5px 8px 0pt 6px;
+       	vertical-align: top; width: 80%;
+}
+
+input[type="submit"] {
+	height: 32px;
+	background-color: #eee;
+	border-color: #ccc #999 #999 #ccc;
+	border-style: solid;
+	border-width: 1px;
+	margin: 0;
+	color: #000;
+	font: 15px Arial, sans-serif;
+	cursor: pointer;
 }
 
 .search-button {
@@ -216,6 +284,20 @@ a.add>img {
 
 #playlist a.remove>img {
 	border: none;
+}
+
+div.playlist-entry {
+	display: inline-block;
+	margin: 0;
+	padding: 0;
+	width: 80%;
+}
+
+div.playlist-entry-meta {
+	width: 18%;
+	margin: 0;
+	padding: 0;
+	display: inline-block;
 }
 
 li.highlight {
