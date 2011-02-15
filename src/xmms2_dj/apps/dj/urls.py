@@ -32,7 +32,4 @@ urlpatterns = patterns('',
                        url(r'^info/title/(?P<id>\d+)/$', views.show_info, name="dj_show_info"),
                        url(r'^volume/up/(?P<vol_add>\d+)/$', views.volume_up, name="dj_volume_up"),
                        url(r'^volume/down/(?P<vol_add>\d+)/$', views.volume_down, name="dj_volume_down"),
-
-
-                       url(r'^iphone/$', views.iphone, name="dj_iphone"),
                       )

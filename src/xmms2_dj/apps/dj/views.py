@@ -14,23 +14,8 @@ from urllib import unquote_plus
 import xmms2
 from xmmsclient import collections
 
-
-def iphone(request):
-    """Rendert eine Seite für das iPhone Interface
-    """
-    client = settings.XMMS2_CLIENT
-
-    artist_coll = collections.Universe()
-
-    template = loader.get_template('dj/iphone/index.html')
-    context = RequestContext(request, {
-        'artists': client.coll_query(['artist'], artist_coll),
-    })
-    return HttpResponse(template.render(context))
-
-
 def common(request, client=settings.XMMS2_CLIENT, artist='Alle', album='Alle'):
-    """Rendert die Index-Seite
+    """Render the index page
     
     @deprecated wird nur noch von der Funktion index benötigt und kann daher in diese integriert werden
     """
@@ -74,10 +59,17 @@ def common(request, client=settings.XMMS2_CLIENT, artist='Alle', album='Alle'):
     return HttpResponse(template.render(context))
 
 
-def index(request):
-    """Rendert die Indexseite
+def index(request, client=settings.XMMS2_CLIENT):
+    """Render the index page
     """
-    return common(request)    
+    if request.is_ajax():
+        template = loader.get_template('concept/ajax/index.html')
+        context = Context({
+            'artists': client.coll_query(['artist',], collections.Universe()),
+        })
+        return HttpResponse(template.render(context))
+    else:
+        return common(request)    
 
 
 def status(request, client=settings.XMMS2_CLIENT):
@@ -91,60 +83,52 @@ def status(request, client=settings.XMMS2_CLIENT):
     return HttpResponse(template.render(context))
 
 
-def play(request):
+def play(request, client = settings.XMMS2_CLIENT):
     """Playback starten und Status updaten
     """
-    client = settings.XMMS2_CLIENT
     client.play()
 
     return status(request)
 
 
-def stop(request):
+def stop(request, client = settings.XMMS2_CLIENT):
     """Playback stoppen und Status updaten
     """
-    client = settings.XMMS2_CLIENT
     client.stop()
 
     return status(request)
 
 
-def jump(request, id):
+def jump(request, id, client = settings.XMMS2_CLIENT):
     """Zur Titel in Playlist springen und Status updaten
        
        @param id ID des Playlisteintrags
     """
     id = int(id)
-
-    client = settings.XMMS2_CLIENT
     client.jump(id)
     
     return status(request)
 
 
-def next(request):
+def next(request, client = settings.XMMS2_CLIENT):
     """Zu nächstem Eintrag in Playlist springen
     """
-    client = settings.XMMS2_CLIENT
     client.next()
 
     return status(request)
 
 
-def prev(request):
+def prev(request, client = settings.XMMS2_CLIENT):
     """Zu vorherigem Eintrag in Playlist springen
     """
-    client = settings.XMMS2_CLIENT
     client.prev()
 
     return status(request)
 
 
-def get_playlist(request):
+def get_playlist(request, client = settings.XMMS2_CLIENT):
     """Liefert die aktuelle Playlist aus
     """
-    client = settings.XMMS2_CLIENT
-
     playlist = client.list()
     playtime = 0
     for entry in playlist:
@@ -161,10 +145,9 @@ def get_playlist(request):
     return HttpResponse(template.render(context))
 
 
-def export_playlist(request):
+def export_playlist(request, client = settings.XMMS2_CLIENT):
     """XML Export der Playlist
     """
-    client = settings.XMMS2_CLIENT
     playlist = client.list(with_mlibid=True)
     template = loader.get_template('dj/playlist.xml')
     context = RequestContext(request, {
@@ -172,7 +155,7 @@ def export_playlist(request):
     })
     return HttpResponse(template.render(context), mimetype='text/xml')
 
-def artist_add(request, artist):
+def artist_add(request, artist, client = settings.XMMS2_CLIENT):
     """Alle Titel eines Künstlers zur Playlist hinzufügen
        
        @param artist Name des Künstlers (bzw. der Band)
@@ -180,8 +163,6 @@ def artist_add(request, artist):
        @remarks
          Evtl sollte Namensgebung nach "add_artist" geändert werden
     """
-    client = settings.XMMS2_CLIENT
-
     artist = unquote_plus(artist)
     artist_coll = collections.Match(field="artist", value=artist)
     client.playlist_add_collection(artist_coll)
@@ -189,7 +170,7 @@ def artist_add(request, artist):
     return get_playlist(request)
     
 
-def album_add(request, artist, album):
+def album_add(request, artist, album, client = settings.XMMS2_CLIENT):
     """Alle Titel eines Albums zur Playlist hinzufügen
 
        @param artist Name des Künstlers
@@ -198,8 +179,6 @@ def album_add(request, artist, album):
        @remarks
          Name sollte evtl. nach "add_album" geändert werden
     """
-    client = settings.XMMS2_CLIENT
-
     artist = unquote_plus(artist)
     album = unquote_plus(album)
 
@@ -216,24 +195,20 @@ def album_add(request, artist, album):
 
     return get_playlist(request)
 
-def add_title(request, id):
+def add_title(request, id, client = settings.XMMS2_CLIENT):
     """Einen Titel zur Playlist hinzufügen
 
        @param id ID des Titels (laut XMMS2 MediaLib)
     """
-    client = settings.XMMS2_CLIENT
-
     id = int(id)
     client.playlist_add_id(id)
 
     return get_playlist(request)
 
 
-def list_artists(requests):
+def list_artists(requests, client = settings.XMMS2_CLIENT):
     """Alle Künstler auflisten
     """
-    client = settings.XMMS2_CLIENT
-
     template = loader.get_template('dj/artistlist.html')
     context = Context({
         'artists': client.coll_query(['artist']),
@@ -242,13 +217,11 @@ def list_artists(requests):
     return HttpResponse(template.render(context))
 
 
-def list_albums(request, artist="Alle"):
+def list_albums(request, artist="Alle", client = settings.XMMS2_CLIENT):
     """Alle Albem eines Künstlers auflisten
        
        @param artist Name des Künstlers/der Band
     """
-    client = settings.XMMS2_CLIENT
-
     artist = unquote_plus(artist)
     artist = smart_str(artist) # vermeidet UnicodeError bei xmms2-Funktionen
 
@@ -266,14 +239,12 @@ def list_albums(request, artist="Alle"):
     return HttpResponse(template.render(context))
 
 
-def list_titles(request, artist="Alle", album="Alle"):
+def list_titles(request, artist="Alle", album="Alle", client = settings.XMMS2_CLIENT):
     """Alle Titel eines Künstlers und oder eines Albums auflisten
 
        @param artist Name des Künstlers
        @param album Albumtitel
     """
-    client = settings.XMMS2_CLIENT
-
     artist = smart_str(unquote_plus(artist)) # Vermeiden von UnicodeError
     album = smart_str(unquote_plus(album))
 
@@ -304,44 +275,38 @@ def list_titles(request, artist="Alle", album="Alle"):
     return HttpResponse(template.render(context))
 
 
-def remove(request, id):
+def remove(request, id, client = settings.XMMS2_CLIENT):
     """Eintrag aus der aktiven Playlist entfernen
        
        @param id ID des Titels (entspricht Position in der Playlist)
     """
     id = int(id)
-    client = settings.XMMS2_CLIENT
     client.playlist_remove_id(id)
 
     return get_playlist(request)
 
 
-def clear_playlist(request):
+def clear_playlist(request, client = settings.XMMS2_CLIENT):
     """Die aktuelle Playliste leeren
     """
-    client = settings.XMMS2_CLIENT
     client.playlist_clear()
 
     return get_playlist(request)
 
 
-def load_playlist(request, playlist):
+def load_playlist(request, playlist, client = settings.XMMS2_CLIENT):
     """Lädt eine Playlist
        
        @playlist Name der Playlist
     """
-    client = settings.XMMS2_CLIENT
-    
     playlist = smart_str(unquote_plus(playlist))
     client.playlist_load(playlist)
 
     return get_playlist(request)
 
 
-def create_playlist(request):
+def create_playlist(request, client = settings.XMMS2_CLIENT):
     """Erstelle eine neue Playlist"""
-    client = settings.XMMS2_CLIENT
-
     playlist = request.POST.get("playlist")
 
     client.playlist_create(playlist)
@@ -350,11 +315,9 @@ def create_playlist(request):
     return get_playlist(request)
 
 
-def get_playlist_list(request):
+def get_playlist_list(request, client = settings.XMMS2_CLIENT):
     """Rendert eine Liste vorhandener Playlists
     """
-    client = settings.XMMS2_CLIENT
-
     template = loader.get_template("dj/playlist_list.html")
     context = Context({
         'playlist_list': client.playlist_list(),
@@ -363,11 +326,9 @@ def get_playlist_list(request):
     return HttpResponse(template.render(context))
 
 
-def search(request):
-    """Universelle Suce mit post-Daten
+def search(request, client = settings.XMMS2_CLIENT):
+    """Universelle Suche mit post-Daten
     """
-    client = settings.XMMS2_CLIENT
-
     search = request.POST.get('search')
     search = "*%s*" % search
 
@@ -393,11 +354,11 @@ def search(request):
     return HttpResponse(template.render(context))
 
 
-def search_artist(request):
+def search_artist(request, client = settings.XMMS2_CLIENT):
     """Nach Künstler suchen
-    """
-    client = settings.XMMS2_CLIENT
 
+       @deprecated
+    """
     artist = request.POST.get('artist')
     artist = "*%s*" % artist
     artist_coll = collections.Match(field="artist", value=artist)
@@ -409,11 +370,11 @@ def search_artist(request):
     return HttpResponse(template.render(context))
 
 
-def search_album(request):
+def search_album(request, client = settings.XMMS2_CLIENT):
     """Nach Album suchen
-    """
-    client = settings.XMMS2_CLIENT
 
+       @deprecated
+    """
     artist = request.POST.get('artist')
     album = request.POST.get('album')
     album = "*%s*" % album
@@ -427,11 +388,11 @@ def search_album(request):
     return HttpResponse(template.render(context))
 
 
-def search_title(request):
+def search_title(request, client = settings.XMMS2_CLIENT):
     """Nach Titel suchen
-    """
-    client = settings.XMMS2_CLIENT
 
+       @deprecated
+    """
     title = request.POST.get('title')
     title = "*%s*" % title
     title_coll = collections.Match(field="title", value=title)
@@ -443,20 +404,17 @@ def search_title(request):
     return HttpResponse(template.render(context))
 
 
-def shuffle_playlist(request):
+def shuffle_playlist(request, client = settings.XMMS2_CLIENT):
     """Die Playlist shufflen
     """
-    client = settings.XMMS2_CLIENT
     client.playlist_shuffle()
 
     return get_playlist(request)
 
 
-def move_entry(request):
+def move_entry(request, client = settings.XMMS2_CLIENT):
     """Einen Eintrag in der Playlist verschieben
     """
-    client = settings.XMMS2_CLIENT
-
     items = request.POST.get('items').split(',')
     item = request.POST.get('item')
 
@@ -473,36 +431,33 @@ def move_entry(request):
     return get_playlist(request)
 
 
-def move_entry_down(request, pos):
+def move_entry_down(request, pos, client = settings.XMMS2_CLIENT):
     """Einen Eintrag in der Playlist nach unten schieben
 
        @param pos Positon des Eintrags in der Playlist
     """
-    client = settings.XMMS2_CLIENT
     pos = int(pos)
     client.playlist_move(pos, pos+1)
 
     return get_playlist(request)
 
 
-def move_entry_up(request, pos):
+def move_entry_up(request, pos, client = settings.XMMS2_CLIENT):
     """Einen Eintrag in der Playlist nach oben schieben
 
        @param pos Position des Eintrags in der Playlist
     """
-    client = settings.XMMS2_CLIENT
     pos = int(pos)
     client.playlist_move(pos, pos-1)
 
     return get_playlist(request)
 
 
-def show_info(request, id):
+def show_info(request, id, client = settings.XMMS2_CLIENT):
     """Detailinfos über einen Song anzeigen
 
        @param id ID des Songs
     """
-    client = settings.XMMS2_CLIENT
     id = int(id)
 
     template = loader.get_template("dj/titleinfo.html")
@@ -512,16 +467,14 @@ def show_info(request, id):
     return HttpResponse(template.render(context))
 
 
-def volume_down(request, vol_add):
+def volume_down(request, vol_add, client = settings.XMMS2_CLIENT):
     """Lautsärke verringern"""
-    client = settings.XMMS2_CLIENT
     vol_add = int(vol_add)
 
     return HttpResponse("volume")
     
-def volume_up(request, vol_add):
+def volume_up(request, vol_add, client = settings.XMMS2_CLIENT):
     """Lautstärke erhöhen"""
-    client = settings.XMMS2_CLIENT
     vol_add = int(vol_add)
 
     template = loader.get_template("dj/player_status.html")
