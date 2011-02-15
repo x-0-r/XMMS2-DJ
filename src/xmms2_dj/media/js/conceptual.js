@@ -1,13 +1,16 @@
 /*** jQery ***/
 
-function update_playlist(url) {
+function update_playlist(url, data) {
+	if(data == null)
+		data = "";
+
 	counter ++;
 
 	$('#playlist a.jump').unbind();
 	$('#playlist a.remove').unbind();
 
 	if(url) {
-		$('#playlist').load(url, function() {
+		$('#playlist').load(url, data, function() {
 			$('#playlist a.jump').click( function(e) {
 				e.preventDefault();
 				$.get($(this).attr('href'));
@@ -149,8 +152,39 @@ $(document).ready(function() {
 				record_list($('#media-list'));
 			});
 		});
+		
+		$('#playlist-select').change( function(e) {
+				var url = $('#playlist-select').attr('value');
+				update_playlist(url);
+		});
 
+		$('#form-create-playlist').hide();
 
+		$('#new-playlist').click( function(e) {
+				e.preventDefault();
+				$('#form-create-playlist').slideDown();
+		});
+
+		$('#form-create-playlist input[type="submit"]').click( function(e) {
+				e.preventDefault();
+				var url = $('#form-create-playlist').attr('action');
+				var data = $('#form-create-playlist').serializeArray();
+				update_playlist(url, data);
+
+				url = $('#playlist-select').parents('form').attr('action');
+				$('#playlist-select').load( url );
+
+				$('#form-create-playlist').slideUp();
+		});
+
+		$('#remove-playlist').click( function(e) {
+				e.preventDefault();
+				var url = $('#remove-playlist').attr('href');
+				update_playlist(url);
+
+				url = $('#playlist-select').parents('form').attr('action');
+				$('#playlist-select').load(url);
+		});
 
 		update_playlist();
 });

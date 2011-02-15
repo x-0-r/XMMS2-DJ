@@ -1,12 +1,16 @@
 <ul>
 	{% for entry in playlist %}
 	<li class="{% cycle '' 'highlight' %}" id="pl_item_{{ entry.id }}">
-	<a class="jump" href="{% url dj_jump id=entry.id %}">
-		{{ entry.artist }} - {{ entry.title }}
-	</a>
-	<a class="remove" href="{% url dj_remove id=entry.id %}" title="remove song from playlist">
-		<img src="{{ MEDIA_URL }}img/remove.png" />
-	</a>
+	<div class="playlist-entry">
+		<a class="jump" href="{% url dj_jump id=entry.id %}">
+			{{ entry.artist }} - {{ entry.title }}
+		</a>
+	</div>
+	<div class="playlist-entry-meta">
+		<a class="remove" href="{% url dj_remove id=entry.id %}" title="remove song from playlist">
+			<img src="{{ MEDIA_URL }}img/remove.png" />
+		</a>
+	</div>
 	</li>
 	{% endfor %}
 </ul>

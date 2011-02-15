@@ -314,11 +314,24 @@ def create_playlist(request, client = settings.XMMS2_CLIENT):
     
     return get_playlist(request)
 
+def remove_playlist(request):
+    """Playlist entfernen"""
+    client = settings.XMMS2_CLIENT
+
+    playlist = request.POST.get('playlist')
+    if playlist is None:
+        playlist = client.playlist_active();
+        client.playlist_load( client.playlist_list()[0] )
+        # TODO error checking here!
+
+    client.playlist_remove(playlist)
+    
+    return get_playlist(request)
 
 def get_playlist_list(request, client = settings.XMMS2_CLIENT):
     """Rendert eine Liste vorhandener Playlists
     """
-    template = loader.get_template("dj/playlist_list.html")
+    template = loader.get_template("concept/playlist_list.html")
     context = Context({
         'playlist_list': client.playlist_list(),
         'active_playlist': client.playlist_active(),
@@ -330,13 +343,28 @@ def search(request, client = settings.XMMS2_CLIENT):
     """Universelle Suche mit post-Daten
     """
     search = request.POST.get('search')
+    search_type = request.POST.get('search-type')
     search = "*%s*" % search
 
-    coll = collections.Union(
-        collections.Match(field="artist", value=search),
-        collections.Match(field="album", value=search),
-        collections.Match(field="title", value=search)
-    )
+    if search_type is None or search_type == 'all':
+        coll = collections.Union(
+            collections.Match(field="artist", value=search),
+            collections.Match(field="album", value=search),
+            collections.Match(field="title", value=search)
+        )
+    elif search_type == 'album':
+        coll = collections.Union(
+            collections.Match(field="album", value=search),
+        )
+    elif search_type == 'artist':
+        coll = collections.Union(
+            collections.Match(field="artist", value=search),
+        )
+    elif search_type == 'title':
+        coll = collections.Union(
+            collections.Match(field="title", value=search)
+        )
+
     d = client.coll_query(['artist', 'album', 'title', 'id'], coll)
     t = {}
     for entry in d:
@@ -469,7 +497,15 @@ def show_info(request, id, client = settings.XMMS2_CLIENT):
 
 def volume_down(request, vol_add, client = settings.XMMS2_CLIENT):
     """Lautsärke verringern"""
-    vol_add = int(vol_add)
+    vol_dec = int(vol_add)
+    
+    if client.volume_down(vol_dec):
+        volume = client.volume_get()
+    else:
+        volume = 'False'
+
+    if request.is_ajax():
+        return HttpResponse(volume);
 
     return HttpResponse("volume")
     
@@ -477,9 +513,12 @@ def volume_up(request, vol_add, client = settings.XMMS2_CLIENT):
     """Lautstärke erhöhen"""
     vol_add = int(vol_add)
 
-    template = loader.get_template("dj/player_status.html")
-    context = Context({
-        'current': client.current(),
-        'volume': client.volume_get(),
-    })
-    return status()
+    if client.volume_up(vol_add):
+        volume = client.volume_get()
+    else:
+        volume = 'False'
+
+    if request.is_ajax():
+        return HttpResponse(volume);
+
+    return HttpResponse("volume")
