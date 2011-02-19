@@ -46,18 +46,27 @@ a>img {
 
 #player-controls {
 	position: fixed;
-	width: 400px;
-	height: 45px;
+	width: 920px;
+	height: 76;
 	top: 0px;
 	left: 50%;
-	margin-left: -200px;
-	padding: 2px 18px;
+	margin-left: -460px;
+	padding: 2px 36px 20px 36px;
 	z-index: 100;
 	background: url("/media/img/controls-bg.png") no-repeat center top fixed;
 }
 
+#player-controls h1 {
+	font-size: 300%;
+	background-image: url("/media/img/gramo.png");
+	background-repeat: no-repeat;
+	padding-left: 40px;
+	margin-top: 0px;
+	float: left;
+}
+
 #player-controls ul {
-	margin: 0;
+	margin: 8px 0px 4px 8px;
 	padding: 0;
 	list-style-type: none;
 }
@@ -91,16 +100,9 @@ div.volume {
 	padding: 20px 0px 0px 40px;
 	background-image: url("/media/img/background.png");
 	background-repeat: no-repeat;
-	height: 112px;
+	height: 32px;
 }
 
-.main-head h1 {
-	font-size: 330%;
-	background-image: url("/media/img/gramo.png");
-	background-repeat: no-repeat;
-	padding-left: 40px;
-	margin-top: 18px;
-}
 .main-content {
 	margin: 0;
 	background-image: url("/media/img/bg2.png");

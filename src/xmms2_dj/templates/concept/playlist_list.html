@@ -1,0 +1,6 @@
+{% for pl in playlist_list %} 
+<option value="{% url dj_load_playlist playlist=pl %}" {% ifequal pl active_playlist %}selected="selected"{% endifequal %}>
+{{ pl }}
+</option>
+{% endfor %}
+
