@@ -443,20 +443,18 @@ def shuffle_playlist(request, client = settings.XMMS2_CLIENT):
 def move_entry(request, client = settings.XMMS2_CLIENT):
     """Einen Eintrag in der Playlist verschieben
     """
-    items = request.POST.get('items').split(',')
-    item = request.POST.get('item')
+    old_pos = int(request.POST.get('old_pos'))
+    new_pos = int(request.POST.get('new_pos'))
+    
+    res = client.playlist_move(old_pos, new_pos)
 
-    old_pos = int(item.lstrip('pl_item'))
-    new_pos = 0
-    # neue Position in der Playlist suchen
-    for i, entry in enumerate(items):
-        if item == entry:
-            new_pos = i
-            break
-
-    client.playlist_move(old_pos, new_pos)
-
-    return get_playlist(request)
+    if request.is_ajax():
+        if res is None:
+            return HttpResponse('True')
+        else:
+            return HttpResponse('False')
+    else:
+        return get_playlist(request)
 
 
 def move_entry_down(request, pos, client = settings.XMMS2_CLIENT):
