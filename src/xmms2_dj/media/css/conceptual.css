@@ -62,6 +62,7 @@ a>img {
 	background-repeat: no-repeat;
 	padding-left: 40px;
 	margin-top: 0px;
+	margin-right: 8px;
 	float: left;
 }
 
@@ -227,12 +228,16 @@ ul.artists{
 }
 
 ul.artists>li {
+	line-height: 1.1em;
+	border-bottom: 1px dashed silver;
 }
 
 ul.artists>li>a {
-	font-size: 200%;
+	font-size: 150%;
 	font-weight: bold;
 	color: black;
+	display: block;
+	width: 100%;
 	text-decoration: none;
 	margin: 8px 0;
 }
@@ -257,6 +262,7 @@ ul.albums>li>a {
 ul.albums ul>li {
 	padding-top: 0;
 	list-style: none;
+	line-height: 100%;
 }
 
 ul.titles {
@@ -278,10 +284,29 @@ a.add>img {
 	padding-right: 5px;
 }
 
+#playlist li {
+	border: 1px solid #dcdcdc;
+	margin-bottom: 2px;
+	padding: 2px 2px 2px 22px;
+	background-color: #fff;
+}
+
+#playlist li:hover {
+	background-color: #ffeb8f;
+}
+
+#playlist li span {
+	margin-left: -18px;
+	margin-top: 2px;
+	position: absolute;
+}
+
+
 #playlist a {
 	text-decoration: none;
 	color: black;
-	font-size: 110%;
+	font-size: 115%;
+	font-weight: normal;
 }
 
 #playlist a.remove>img {

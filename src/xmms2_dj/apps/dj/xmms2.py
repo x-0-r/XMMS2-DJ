@@ -186,10 +186,7 @@ class XmmsClient(object):
         """
         max_pos = len(self.list())-1
         if new_pos > max_pos or new_pos < 0 or cur_pos < 0 or cur_pos > max_pos:
-            print "Failed to move from %d to %d" % (cur_pos, new_pos)
             return False
-
-        print "moving from %d to %d" % (cur_pos, new_pos)
 
         result = self.client.playlist_move(cur_pos, new_pos)
         result.wait()
