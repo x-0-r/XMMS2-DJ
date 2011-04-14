@@ -30,8 +30,13 @@ apps/dj/xmms2.py around line 16.
 Quick test
 ----------
 For a quick test, start your xmms2 daemon,
+
 	xmms2-launcher
+
 mount the media files to where your MEDIA_URL points,
+
 	mount --bind media/ /var/www/media
+
 run the django development server.
+
 	python manage.py runserver
