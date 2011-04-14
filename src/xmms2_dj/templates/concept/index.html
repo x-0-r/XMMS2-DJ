@@ -9,7 +9,7 @@
 
 		<link href="{{ MEDIA_URL }}css/conceptual.css" rel="stylesheet" type="text/css" />
 
-		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+		<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.min.js"></script>
 		<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-ui.js"></script>
 		<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.bpopup-0.4.1.min.js"></script>
 		<script type="text/javascript" src="{{ MEDIA_URL }}js/conceptual.js"></script>
@@ -23,7 +23,8 @@
 							<h1>XMMS2 DJ</h1>
 							<ul>
 								<li><a href="{% url dj_play %}"><img alt="play" src="{{ MEDIA_URL }}img/play.png" /></a></li>
-								<li><a href="{% url dj_stop %}"><img alt="pause" src="{{ MEDIA_URL }}img/pause.png" /></a></li>
+								<li><a href="{% url dj_pause %}"><img alt="pause" src="{{ MEDIA_URL }}img/pause.png" /></a></li>
+								<li><a href="{% url dj_stop %}"><img alt="stop" src="{{ MEDIA_URL }}img/stop.png" /></a></li>
 								<li><a href="{% url dj_previous %}"><img alt="previus" src="{{ MEDIA_URL }}img/prev.png" /></a></li>
 								<li><a href="{% url dj_next %}"><img alt="next" src="{{ MEDIA_URL }}img/next.png" /></a></li>
 								<li><a href="{% url dj_volume_down vol_add=10 %}"><img alt="volume down" src="{{ MEDIA_URL}}img/volume_down.png" /></a></li>

@@ -39,6 +39,12 @@ class XmmsClient(object):
         result = self.client.playback_start()
         result.wait()
 
+    def pause(self):
+        """pause playback
+        """
+        result = self.client.playback_pause()
+        result.wait()
+
     def stop(self):
         """stop playback
         """

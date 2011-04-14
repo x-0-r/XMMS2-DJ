@@ -91,6 +91,13 @@ def play(request, client = settings.XMMS2_CLIENT):
     return status(request)
 
 
+def pause(request, client = settings.XMMS2_CLIENT):
+    """Playback pausieren und Status updaten
+    """
+    client.pause()
+
+    return status(request)
+
 def stop(request, client = settings.XMMS2_CLIENT):
     """Playback stoppen und Status updaten
     """
