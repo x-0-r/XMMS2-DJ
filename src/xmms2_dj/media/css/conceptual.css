@@ -16,7 +16,7 @@ body {
 	position: relative;
 	top: 0;
 	left: 0;
-	background: url("/media/img/bg.jpg") top fixed;
+	background: url("../img/bg.jpg") top fixed;
 }
 
 a>img {
@@ -37,7 +37,7 @@ a>img {
 	left: 0;
 	margin: 0;
 	padding: 0;
-	background: url("/media/img/notes.png") no-repeat center top fixed;
+	background: url("../img/notes.png") no-repeat center top fixed;
 }
 
 #header {
@@ -53,12 +53,12 @@ a>img {
 	margin-left: -460px;
 	padding: 2px 36px 20px 36px;
 	z-index: 100;
-	background: url("/media/img/controls-bg.png") no-repeat center top fixed;
+	background: url("../img/controls-bg.png") no-repeat center top fixed;
 }
 
 #player-controls h1 {
 	font-size: 300%;
-	background-image: url("/media/img/gramo.png");
+	background-image: url("../img/gramo.png");
 	background-repeat: no-repeat;
 	padding-left: 40px;
 	margin-top: 0px;
@@ -79,7 +79,7 @@ a>img {
 }
 
 div.volume {
-	background: url("/media/img/volume_bg.png") repeat-x;
+	background: url("../img/volume_bg.png") repeat-x;
 	float: left;
 	font-weight: bold;
 	font-size: 15px;
@@ -99,14 +99,14 @@ div.volume {
 .main-head {
 	margin: 0;
 	padding: 20px 0px 0px 40px;
-	background-image: url("/media/img/background.png");
+	background-image: url("../img/background.png");
 	background-repeat: no-repeat;
 	height: 32px;
 }
 
 .main-content {
 	margin: 0;
-	background-image: url("/media/img/bg2.png");
+	background-image: url("../img/bg2.png");
 	background-repeat: repeat-y;
 	padding: 0 20px 20px 20px;
 }
@@ -244,7 +244,7 @@ ul.artists>li>a {
 
 ul.albums {
 	list-style-type: disc;
-	list-style-image: url("/media/img/record2.png");
+	list-style-image: url("../img/record2.png");
 }
 
 ul.albums>li {
