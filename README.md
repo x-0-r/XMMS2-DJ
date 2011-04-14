@@ -1,7 +1,7 @@
 XMMS2-DJ
 ========
 
-Watt is it?
+What is it?
 -----------
 XMMS2-DJ is a web client for the media player [XMMS2](http://xmms2.org). It is
 based on the [Django](http://www.djangoproject.com) framework.
